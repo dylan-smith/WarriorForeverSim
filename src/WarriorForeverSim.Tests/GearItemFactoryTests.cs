@@ -9,11 +9,10 @@ namespace WarriorForeverSim.Tests
     public class GearItemFactoryTests
     {
         [TestMethod]
-        [ExpectedException(typeof(Exception))]
         public void EmptyYaml()
         {
             var yaml = "";
-            GearItemFactory.LoadGearItem(yaml, GearType.Head);
+            Assert.ThrowsExactly<Exception>(() => GearItemFactory.LoadGearItem(yaml, GearType.Head));
         }
 
         [TestMethod]
@@ -88,11 +87,10 @@ phase: 1";
         }
 
         [TestMethod]
-        [ExpectedException(typeof(JSchemaValidationException))]
         public void InvalidPropertyInYaml()
         {
             var yaml = "name: Beast Lord Helm\nattackpower: 12";
-            GearItemFactory.LoadGearItem(yaml, GearType.Head);
+            Assert.ThrowsExactly<JSchemaValidationException>(() => GearItemFactory.LoadGearItem(yaml, GearType.Head));
         }
 
         [TestMethod]

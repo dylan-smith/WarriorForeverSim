@@ -125,13 +125,12 @@ namespace WarriorForeverSim.Tests
             Assert.AreEqual(3253 + 1215, ManaCalculator.Calculate(state));
         }
 
-        [ExpectedException(typeof(Exception))]
         [TestMethod]
         public void NoRace()
         {
             var state = new SimulationState();
 
-            AgilityCalculator.Calculate(state);
+            Assert.ThrowsExactly<Exception>(() => AgilityCalculator.Calculate(state));
         }
 
         [TestMethod]
