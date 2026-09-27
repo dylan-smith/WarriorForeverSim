@@ -113,14 +113,13 @@ namespace WarriorForeverSim.Tests.AbilityTests
         }
 
         [TestMethod]
-        [ExpectedException(typeof(Exception))]
         public void AutoShotCooldownCompletedEventAuraMissing()
         {
             var state = new SimulationState();
 
             var e = new AutoShotCooldownCompletedEvent(10.1);
 
-            e.ProcessEvent(state);
+            Assert.ThrowsExactly<Exception>(() => e.ProcessEvent(state));
         }
 
         [TestMethod]
