@@ -11,10 +11,6 @@ env:
   DOTNET_NOLOGO: true
   DOTNET_CLI_TELEMETRY_OPTOUT: true
   DOTNET_SKIP_FIRST_TIME_EXPERIENCE: true
-  # The projects target netcoreapp3.1, which is end of life and cannot run on
-  # current Ubuntu runners (no libssl 1.1). Roll forward so the test host runs
-  # on the installed .NET 10 runtime instead.
-  DOTNET_ROLL_FORWARD: Major
 
 jobs:
   build:
