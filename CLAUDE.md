@@ -1,0 +1,43 @@
+# CLAUDE.md
+
+This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+
+## Project
+
+A discrete-event combat simulator for a WoW TBC (level 70) hunter, despite the repo name. C# on .NET 10, MSTest. Solution and both projects live under `src/`; `Program.cs` is still a placeholder, so the library and its tests are the real product.
+
+## Commands
+
+Run from `src/` (the solution file is there, and CI uses `working-directory: src`).
+
+```
+dotnet restore WarriorForeverSim.sln
+dotnet build WarriorForeverSim.sln --configuration Release --no-restore
+dotnet test WarriorForeverSim.sln --configuration Release --no-build
+dotnet test WarriorForeverSim.Tests --filter "FullyQualifiedName~SerpentsSwiftnessTests"   # one class
+dotnet test WarriorForeverSim.Tests --filter "Name=SerpentsSwiftness"                      # one method
+dotnet format WarriorForeverSim.sln --verify-no-changes --severity warn                    # what CI's lint job runs
+dotnet format WarriorForeverSim.sln                                                        # fix formatting
+```
+
+CI (`.github/workflows/ci.yml`) fails on any `.editorconfig` rule at `warning` severity or above, so run `dotnet format` before pushing. Notable enforced rules: `var` everywhere, braces always, block-scoped namespaces, `using` outside namespace, `_camelCase` private fields, `readonly` where possible, no unused usings/members/assignments (IDE0005/0051/0052/0059).
+
+## Architecture
+
+**Event loop.** `Simulation.Run()` validates state, then loops: `ExecuteRotation()` queues abilities, `GetNextEvent()` pops the earliest `EventInfo` from `SimulationState.Events`, advances `CurrentTime`, and processes every event at that timestamp until `FightLength` is exceeded. Each event's `ProcessEvent(state)` mutates state and typically schedules follow-up events (e.g. `AutoShotCastEvent` schedules `AutoShotCompletedEvent` and `AutoShotCooldownCompletedEvent`).
+
+**Procs are subscribers, not events.** After an event is processed, `EventPublisher.PublishEvent` appends it to `ProcessedEvents` and dispatches by type to the static classes in `Procs/` (e.g. `ExposeWeakness.ProcessEvent`), which roll for a proc and enqueue `*ProcEvent`/`*ExpiredEvent`. Adding a proc means: new event classes in `Events/`, a handler in `Procs/`, a `case` in `EventPublisher`, and usually an `Aura` enum value.
+
+**State vs. config.** `SimulationState` holds mutable run-time data (event queue, `CurrentTime`, active `Auras`, warnings/errors). `SimulationConfig` holds inputs: `Gear`, `Buffs`, `Talents` (dictionary of `Talent` to rank), `PlayerSettings`, `BossSettings`, `SimulationSettings`. Validation issues are strings from `SimulationWarnings` / `SimulationErrors`; errors abort the run, warnings do not.
+
+**Stat calculators are singletons with mock injection.** Every derived stat is a `BaseStatCalculator` subclass in `StatCalculators/` exposing a static `Calculate(state)` that routes through a per-type cached instance. Calculators layer base stats, gear totals (`Gear.GetStatTotal`), buffs, and talents in a specific order with `.Floor()` between multiplicative steps to mirror in-game rounding; preserve that ordering when editing. Tests replace a calculator with `BaseStatCalculator.InjectMock(typeof(X), new FakeStatCalculator(value))` and must call `ClearMocks()` in `[TestCleanup]`.
+
+**Randomness is also a mockable singleton.** All rolls go through `RandomGenerator.Roll(RollType)`. Tests inject `FakeRandomGenerator` (scripted values, optionally per `RollType`) via `RandomGenerator.InjectMock` and clean up with `ClearMock()`.
+
+**Gear is data-driven YAML.** Items, enchants, and gems are one `.yml` file each under `Gear/<Slot>/`, `Enchants/<Slot>/`, and `Gems/`, copied to the output directory and loaded lazily by `GearItemFactory` from the assembly location. Each file is validated against `Config/GearItem-Schema.json` before being mapped onto `GearItem` via `[YamlProperty("...")]` attributes, so a new stat needs a schema entry and an attributed property. Folder name must match a `GearType` enum value. Look up items by name with `GearItemFactory.Load("Item Name")` or the per-slot `LoadRanged(...)` etc.
+
+**Code-driven gear.** Meta gems (`MetaGems/`, subclasses of `MetaGem`) and set bonuses (`GearSets/`, implementations of `IGearSet`) are discovered by reflection and their `Apply(state)` runs during `SimulationState.Validate()`. Adding one is just adding the class.
+
+## Tests
+
+Tests mirror the domain, not the source tree: `TalentTests/`, `BuffTests/`, `AuraTests/`, `ProcTests/`, `MetaGemTests/`, `GearSetTests/`, plus `StatCalculatorTests.cs`, `SimulationTests.cs`, `ConfigValidationTests.cs`. Most tests build a bare `SimulationState`, set a race/talent/buff, and assert a calculator result. Expected base stats live in `Constants.cs` (Draenei is the reference race). Tests that inject mocks must clear them or they leak into other tests in the same run.
