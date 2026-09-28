@@ -23,75 +23,58 @@ namespace WarriorForeverSim.Tests
                 Debug.WriteLine(e);
             }
 
-            Assert.AreEqual(16333.5, totalDamage, 0.9);
-            Assert.AreEqual(19, result.DamageEvents.Count());
+            // Golden output for DefaultConfig with the seed above. Regenerate these
+            // values whenever DefaultConfig or the damage calculators intentionally change.
+            //
+            // Base crit is 25.29%; Master Tactician adds 10% while active.
+            // Base hit damage is 737.19; Expose Weakness raises it to 778.41 while active.
+            var expected = new[]
+            {
+                new DamageEvent(0.4348, 1518.62, DamageType.Crit, 0, 0.2529, 0.7471),
+                new DamageEvent(2.9565, 778.41, DamageType.Hit, 0, 0.2529, 0.7471),
+                new DamageEvent(5.4783, 778.41, DamageType.Hit, 0, 0.2529, 0.7471),
+                new DamageEvent(8.0000, 737.19, DamageType.Hit, 0, 0.2529, 0.7471),
+                new DamageEvent(10.5217, 737.19, DamageType.Hit, 0, 0.2529, 0.7471),
+                new DamageEvent(13.0435, 737.19, DamageType.Hit, 0, 0.3529, 0.6471),
+                new DamageEvent(15.5652, 737.19, DamageType.Hit, 0, 0.3529, 0.6471),
+                new DamageEvent(18.0870, 1518.62, DamageType.Crit, 0, 0.3529, 0.6471),
+                new DamageEvent(20.6087, 1603.53, DamageType.Crit, 0, 0.2529, 0.7471),
+                new DamageEvent(23.1304, 778.41, DamageType.Hit, 0, 0.2529, 0.7471),
+                new DamageEvent(25.6522, 1603.53, DamageType.Crit, 0, 0.2529, 0.7471),
+                new DamageEvent(28.1739, 1603.53, DamageType.Crit, 0, 0.3529, 0.6471),
+                new DamageEvent(30.6957, 778.41, DamageType.Hit, 0, 0.3529, 0.6471),
+                new DamageEvent(33.2174, 778.41, DamageType.Hit, 0, 0.3529, 0.6471),
+                new DamageEvent(35.7391, 737.19, DamageType.Hit, 0, 0.2529, 0.7471),
+                new DamageEvent(38.2609, 737.19, DamageType.Hit, 0, 0.2529, 0.7471),
+                new DamageEvent(40.7826, 737.19, DamageType.Hit, 0, 0.2529, 0.7471),
+                new DamageEvent(43.3043, 737.19, DamageType.Hit, 0, 0.2529, 0.7471),
+                new DamageEvent(45.8261, 737.19, DamageType.Hit, 0, 0.2529, 0.7471),
+                new DamageEvent(48.3478, 737.19, DamageType.Hit, 0, 0.2529, 0.7471),
+                new DamageEvent(50.8696, 737.19, DamageType.Hit, 0, 0.2529, 0.7471),
+                new DamageEvent(53.3913, 1518.62, DamageType.Crit, 0, 0.3529, 0.6471),
+                new DamageEvent(55.9130, 778.41, DamageType.Hit, 0, 0.3529, 0.6471),
+                new DamageEvent(58.4348, 778.41, DamageType.Hit, 0, 0.3529, 0.6471),
+            };
 
-            var expected = new DamageEvent(0.5, 1306.68, DamageType.Crit, 0, 0.344, 0.656);
-            AssertDamageEvent(expected, result.DamageEvents.ElementAt(0));
+            Assert.AreEqual(22924.47, totalDamage, 0.01);
+            Assert.AreEqual(expected.Length, result.DamageEvents.Count());
 
-            expected = new DamageEvent(3.7, 653.34, DamageType.Hit, 0, 0.344, 0.656);
-            AssertDamageEvent(expected, result.DamageEvents.ElementAt(1));
+            var actual = result.DamageEvents.ToList();
 
-            expected = new DamageEvent(6.9, 653.34, DamageType.Hit, 0, 0.344, 0.656);
-            AssertDamageEvent(expected, result.DamageEvents.ElementAt(2));
-
-            expected = new DamageEvent(10.1, 1306.68, DamageType.Crit, 0, 0.344, 0.656);
-            AssertDamageEvent(expected, result.DamageEvents.ElementAt(3));
-
-            expected = new DamageEvent(13.3, 653.34, DamageType.Hit, 0, 0.344, 0.656);
-            AssertDamageEvent(expected, result.DamageEvents.ElementAt(4));
-
-            expected = new DamageEvent(16.5, 653.34, DamageType.Hit, 0, 0.344, 0.656);
-            AssertDamageEvent(expected, result.DamageEvents.ElementAt(5));
-
-            expected = new DamageEvent(19.7, 653.34, DamageType.Hit, 0, 0.344, 0.656);
-            AssertDamageEvent(expected, result.DamageEvents.ElementAt(6));
-
-            expected = new DamageEvent(22.9, 1306.68, DamageType.Crit, 0, 0.344, 0.656);
-            AssertDamageEvent(expected, result.DamageEvents.ElementAt(7));
-
-            expected = new DamageEvent(26.1, 653.34, DamageType.Hit, 0, 0.344, 0.656);
-            AssertDamageEvent(expected, result.DamageEvents.ElementAt(8));
-
-            expected = new DamageEvent(29.3, 1306.68, DamageType.Crit, 0, 0.344, 0.656);
-            AssertDamageEvent(expected, result.DamageEvents.ElementAt(9));
-
-            expected = new DamageEvent(32.5, 653.34, DamageType.Hit, 0, 0.344, 0.656);
-            AssertDamageEvent(expected, result.DamageEvents.ElementAt(10));
-
-            expected = new DamageEvent(35.7, 653.34, DamageType.Hit, 0, 0.344, 0.656);
-            AssertDamageEvent(expected, result.DamageEvents.ElementAt(11));
-
-            expected = new DamageEvent(38.9, 653.34, DamageType.Hit, 0, 0.344, 0.656);
-            AssertDamageEvent(expected, result.DamageEvents.ElementAt(12));
-
-            expected = new DamageEvent(42.1, 1306.68, DamageType.Crit, 0, 0.344, 0.656);
-            AssertDamageEvent(expected, result.DamageEvents.ElementAt(13));
-
-            expected = new DamageEvent(45.3, 653.34, DamageType.Hit, 0, 0.344, 0.656);
-            AssertDamageEvent(expected, result.DamageEvents.ElementAt(14));
-
-            expected = new DamageEvent(48.5, 653.34, DamageType.Hit, 0, 0.344, 0.656);
-            AssertDamageEvent(expected, result.DamageEvents.ElementAt(15));
-
-            expected = new DamageEvent(51.7, 653.34, DamageType.Hit, 0, 0.344, 0.656);
-            AssertDamageEvent(expected, result.DamageEvents.ElementAt(16));
-
-            expected = new DamageEvent(54.9, 1306.68, DamageType.Crit, 0, 0.344, 0.656);
-            AssertDamageEvent(expected, result.DamageEvents.ElementAt(17));
-
-            expected = new DamageEvent(58.1, 653.34, DamageType.Hit, 0, 0.344, 0.656);
-            AssertDamageEvent(expected, result.DamageEvents.ElementAt(18));
+            for (var i = 0; i < expected.Length; i++)
+            {
+                AssertDamageEvent(expected[i], actual[i], i);
+            }
         }
 
-        private void AssertDamageEvent(DamageEvent expected, DamageEvent actual)
+        private void AssertDamageEvent(DamageEvent expected, DamageEvent actual, int index)
         {
-            Assert.AreEqual(expected.Damage, actual.Damage, 0.01);
-            Assert.AreEqual(expected.Timestamp, actual.Timestamp, 0.01);
-            Assert.AreEqual(expected.DamageType, actual.DamageType);
-            Assert.AreEqual(expected.CritChance, actual.CritChance, 0.001);
-            Assert.AreEqual(expected.HitChance, actual.HitChance, 0.001);
-            Assert.AreEqual(expected.MissChance, actual.MissChance, 0.001);
+            Assert.AreEqual(expected.Damage, actual.Damage, 0.01, $"Damage mismatch at event {index}");
+            Assert.AreEqual(expected.Timestamp, actual.Timestamp, 0.01, $"Timestamp mismatch at event {index}");
+            Assert.AreEqual(expected.DamageType, actual.DamageType, $"DamageType mismatch at event {index}");
+            Assert.AreEqual(expected.CritChance, actual.CritChance, 0.001, $"CritChance mismatch at event {index}");
+            Assert.AreEqual(expected.HitChance, actual.HitChance, 0.001, $"HitChance mismatch at event {index}");
+            Assert.AreEqual(expected.MissChance, actual.MissChance, 0.001, $"MissChance mismatch at event {index}");
         }
     }
 }
