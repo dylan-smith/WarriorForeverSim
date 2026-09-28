@@ -26,10 +26,6 @@ namespace WarriorForeverSim
                         return 69.0;
                     case Race.Troll:
                         return 65.0;
-                    case Race.Draenei:
-                        return 65.0;
-                    case Race.BloodElf:
-                        return 61.0;
                     default:
                         // TODO: Richer exceptions
                         throw new Exception("Race not set");
@@ -52,10 +48,6 @@ namespace WarriorForeverSim
                     case Race.Tauren:
                         return 146.0;
                     case Race.Troll:
-                        return 153.0;
-                    case Race.Draenei:
-                        return 148.0;
-                    case Race.BloodElf:
                         return 153.0;
                     default:
                         // TODO: Richer exceptions
@@ -80,10 +72,6 @@ namespace WarriorForeverSim
                         return 110.0;
                     case Race.Troll:
                         return 109.0;
-                    case Race.Draenei:
-                        return 107.0;
-                    case Race.BloodElf:
-                        return 106.0;
                     default:
                         // TODO: Richer exceptions
                         throw new Exception("Race not set");
@@ -107,10 +95,6 @@ namespace WarriorForeverSim
                         return 72.0;
                     case Race.Troll:
                         return 73.0;
-                    case Race.Draenei:
-                        return 78.0;
-                    case Race.BloodElf:
-                        return 81.0;
                     default:
                         // TODO: Richer exceptions
                         throw new Exception("Race not set");
@@ -134,10 +118,6 @@ namespace WarriorForeverSim
                         return 85.0;
                     case Race.Troll:
                         return 84.0;
-                    case Race.Draenei:
-                        return 85.0;
-                    case Race.BloodElf:
-                        return 82.0;
                     default:
                         // TODO: Richer exceptions
                         throw new Exception("Race not set");

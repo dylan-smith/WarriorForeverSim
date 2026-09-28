@@ -24,11 +24,6 @@
                 rangedAP += 264;
             }
 
-            if (state.Auras.Contains(Aura.ExposeWeakness))
-            {
-                rangedAP += ExposeWeakness.AttackPower;
-            }
-
             // TODO: Orc Bloodfury
 
             return rangedAP;

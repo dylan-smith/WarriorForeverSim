@@ -24,11 +24,6 @@
                 critChance += killerInstinctRank * 0.01;
             }
 
-            if (state.Auras.Contains(Aura.MasterTactician))
-            {
-                critChance += 0.02 * state.Config.Talents[Talent.MasterTactician];
-            }
-
             if (state.Config.Buffs.Contains(Buff.ElixirOfMajorAgility))
             {
                 critChance += 20.0 / 2208;

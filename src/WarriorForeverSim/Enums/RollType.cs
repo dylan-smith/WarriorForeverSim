@@ -4,10 +4,5 @@
     {
         MeleeMiss,
         MeleeCrit,
-        AutoShotMiss,
-        AutoShotCrit,
-        ImprovedAspectOfTheHawkProc,
-        ExposeWeaknessProc,
-        MasterTacticianProc
     }
 }

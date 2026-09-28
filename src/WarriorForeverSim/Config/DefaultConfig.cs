@@ -10,47 +10,31 @@ namespace WarriorForeverSim
 
             Gear.Head = GearItemFactory.LoadHead("Beast Lord Helm");
             Gear.Head.Enchant = GearItemFactory.LoadHeadEnchant("Glyph of Ferocity");
-            Gear.Head.Sockets.First(s => s.Color == SocketColor.Red).Gem = GearItemFactory.LoadGem("Delicate Living Ruby");
-            Gear.Head.Sockets.First(s => s.Color == SocketColor.Meta).Gem = GearItemFactory.LoadGem("Relentless Earthstorm Diamond");
 
             Gear.Neck = GearItemFactory.LoadNeck("Worgen Claw Necklace");
 
             Gear.Shoulder = GearItemFactory.LoadShoulder("Beast Lord Mantle");
             Gear.Shoulder.Enchant = GearItemFactory.LoadShoulderEnchant("Greater Inscription of the Blade");
-            Gear.Shoulder.Sockets.First(s => s.Color == SocketColor.Yellow).Gem = GearItemFactory.LoadGem("Inscribed Ornate Topaz");
-            Gear.Shoulder.Sockets.First(s => s.Color == SocketColor.Red).Gem = GearItemFactory.LoadGem("Delicate Living Ruby");
 
             Gear.Back = GearItemFactory.LoadBack("Blood Knight War Cloak");
             Gear.Back.Enchant = GearItemFactory.LoadBackEnchant("Greater Agility");
 
             Gear.Chest = GearItemFactory.LoadChest("Beast Lord Cuirass");
             Gear.Chest.Enchant = GearItemFactory.LoadChestEnchant("Exceptional Stats");
-            Gear.Chest.Sockets.First(s => s.Color == SocketColor.Red).Gem = GearItemFactory.LoadGem("Delicate Living Ruby");
-            Gear.Chest.Sockets.Last(s => s.Color == SocketColor.Red).Gem = GearItemFactory.LoadGem("Delicate Living Ruby");
-            Gear.Chest.Sockets.First(s => s.Color == SocketColor.Blue).Gem = GearItemFactory.LoadGem("Infused Nightseye");
 
             Gear.Wrist = GearItemFactory.LoadWrist("Nightfall Wristguards");
             Gear.Wrist.Enchant = GearItemFactory.LoadWristEnchant("Assault");
 
             Gear.Hands = GearItemFactory.LoadHands("Beast Lord Handguards");
             Gear.Hands.Enchant = GearItemFactory.LoadHandEnchant("Superior Agility");
-            Gear.Hands.Sockets.First(s => s.Color == SocketColor.Red).Gem = GearItemFactory.LoadGem("Delicate Living Ruby");
-            Gear.Hands.Sockets.First(s => s.Color == SocketColor.Blue).Gem = GearItemFactory.LoadGem("Infused Nightseye");
 
             Gear.Waist = GearItemFactory.LoadWaist("Girdle of Treachery");
-            Gear.Waist.Sockets[0].Gem = GearItemFactory.LoadGem("Delicate Living Ruby");
-            Gear.Waist.Sockets[1].Gem = GearItemFactory.LoadGem("Delicate Living Ruby");
 
             Gear.Legs = GearItemFactory.LoadLegs("Skulker's Greaves");
             Gear.Legs.Enchant = GearItemFactory.LoadLegEnchant("Nethercobra Leg Armor");
-            Gear.Legs.Sockets[0].Gem = GearItemFactory.LoadGem("Delicate Living Ruby");
-            Gear.Legs.Sockets[1].Gem = GearItemFactory.LoadGem("Delicate Living Ruby");
-            Gear.Legs.Sockets[2].Gem = GearItemFactory.LoadGem("Delicate Living Ruby");
 
             Gear.Feet = GearItemFactory.LoadFeet("Edgewalker Longboots");
             Gear.Feet.Enchant = GearItemFactory.LoadFeetEnchant("Dexterity");
-            Gear.Feet.Sockets.First(s => s.Color == SocketColor.Red).Gem = GearItemFactory.LoadGem("Delicate Living Ruby");
-            Gear.Feet.Sockets.First(s => s.Color == SocketColor.Yellow).Gem = GearItemFactory.LoadGem("Wicked Noble Topaz");
 
             Gear.Finger1 = GearItemFactory.LoadFinger("Ring of the Recalcitrant");
             Gear.Finger2 = GearItemFactory.LoadFinger("Garona's Signet Ring");
@@ -62,9 +46,6 @@ namespace WarriorForeverSim
 
             Gear.OffHand = GearItemFactory.LoadOffHand("Blade of the Unrequited");
             Gear.OffHand.Enchant = GearItemFactory.LoadOneHandEnchant("Greater Agility");
-            Gear.OffHand.Sockets.First(s => s.Color == SocketColor.Red).Gem = GearItemFactory.LoadGem("Delicate Living Ruby");
-            Gear.OffHand.Sockets.First(s => s.Color == SocketColor.Yellow).Gem = GearItemFactory.LoadGem("Wicked Noble Topaz");
-            Gear.OffHand.Sockets.First(s => s.Color == SocketColor.Blue).Gem = GearItemFactory.LoadGem("Infused Nightseye");
 
             Gear.Ranged = GearItemFactory.LoadRanged("Sunfury Bow of the Phoenix");
             Gear.Ranged.Enchant = GearItemFactory.LoadRangedEnchant("Stabilized Eternium Scope");
@@ -75,7 +56,7 @@ namespace WarriorForeverSim
             BossSettings.Level = 73;
             BossSettings.BossType = BossType.Demon;
 
-            PlayerSettings.Race = Race.Draenei;
+            PlayerSettings.Race = Race.Dwarf;
             PlayerSettings.Level = 70;
 
             //Buffs.Add(Buff.BlessingOfKings);

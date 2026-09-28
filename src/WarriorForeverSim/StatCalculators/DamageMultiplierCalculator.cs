@@ -24,11 +24,6 @@
                 damageMultiplier *= 1 + (0.01 * focusedFireRank);
             }
 
-            if (state.Auras.Contains(Aura.TheBeastWithin))
-            {
-                damageMultiplier *= 1.1;
-            }
-
             return damageMultiplier;
         }
     }

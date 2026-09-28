@@ -2,11 +2,12 @@
 {
     public static class Constants
     {
-        public static double DRAENEI_AGI = 148.0;
-        public static double DRAENEI_STR = 65.0;
-        public static double DRAENEI_INT = 78.0;
-        public static double DRAENEI_STA = 107.0;
-        public static double DRAENEI_SPI = 85.0;
+        // TODO: Replace with real values
+        public static double HUMAN_AGI = 148.0;
+        public static double HUMAN_STR = 65.0;
+        public static double HUMAN_INT = 78.0;
+        public static double HUMAN_STA = 107.0;
+        public static double HUMAN_SPI = 85.0;
 
         public static double AGI_FOR_ZERO_CRIT = 253.2;
 

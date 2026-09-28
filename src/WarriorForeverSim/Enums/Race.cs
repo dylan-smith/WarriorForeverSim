@@ -3,12 +3,15 @@
     public enum Race
     {
         NotSet,
+        Human,
+        Gnome,
         Dwarf,
         NightElf,
-        Draenei,
         Orc,
         Tauren,
         Troll,
-        BloodElf
+        Undead,
+        WindShaperSkyborne,
+        HighOrderSkyborne,
     }
 }

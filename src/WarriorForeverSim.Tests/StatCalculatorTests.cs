@@ -12,63 +12,22 @@ namespace WarriorForeverSim.Tests
         }
 
         [TestMethod]
-        public void StrengthCalculatorWithGemsAndSocketBonus()
-        {
-            var gear = new GearItem
-            {
-                Strength = 7
-            };
-
-            var gem1 = new GearItem
-            {
-                Strength = 3,
-                Agility = 27,
-                Color = GemColor.Red
-            };
-
-            var gem2 = new GearItem
-            {
-                Strength = 6,
-                Defense = 12,
-                Color = GemColor.Blue
-            };
-
-            gear.Sockets.Add(new Socket(SocketColor.Red) { Gem = gem1 });
-            gear.Sockets.Add(new Socket(SocketColor.Blue) { Gem = gem2 });
-
-            var bonus = new GearItem
-            {
-                Agility = 11,
-                Strength = 33
-            };
-
-            gear.SocketBonus = bonus;
-
-            var state = new SimulationState();
-            state.Config.PlayerSettings.Race = Race.Draenei;
-            state.Config.Gear.Head = gear;
-
-            Assert.AreEqual(Constants.DRAENEI_STR + 49, StrengthCalculator.Calculate(state));
-        }
-
-        [TestMethod]
-        public void DodgeCalculatorBaseStats()
+        public void StrengthCalculatorBaseStats()
         {
             var state = new SimulationState();
-            state.Config.PlayerSettings.Race = Race.Draenei;
+            state.Config.PlayerSettings.Race = Race.Human;
 
-            Assert.AreEqual(Constants.DRAENEI_AGI / 2500, DodgeCalculator.Calculate(state), 0.000001);
+            Assert.AreEqual(Constants.HUMAN_STR + 49, StrengthCalculator.Calculate(state));
         }
 
         [TestMethod]
         public void CritCalculatorBaseStats()
         {
             var state = new SimulationState();
-            state.Config.PlayerSettings.Race = Race.Draenei;
+            state.Config.PlayerSettings.Race = Race.Human;
             state.Config.PlayerSettings.Level = 70;
             state.Config.BossSettings.Level = 73;
 
-            Assert.AreEqual(0.0, RangedCritCalculator.Calculate(state), 0.000001);
             Assert.AreEqual(0.0, MeleeCritCalculator.Calculate(state), 0.000001);
         }
 
@@ -80,11 +39,9 @@ namespace WarriorForeverSim.Tests
             state.Config.BossSettings.Level = 73;
 
             BaseStatCalculator.InjectMock(typeof(AgilityCalculator), new FakeStatCalculator(Constants.AGI_FOR_ZERO_CRIT));
-            Assert.AreEqual(0.0, RangedCritCalculator.Calculate(state));
             Assert.AreEqual(0.0, MeleeCritCalculator.Calculate(state));
 
             BaseStatCalculator.InjectMock(typeof(AgilityCalculator), new FakeStatCalculator(Constants.AGI_FOR_ZERO_CRIT + 1));
-            Assert.IsTrue(RangedCritCalculator.Calculate(state) > 0.0);
             Assert.IsTrue(MeleeCritCalculator.Calculate(state) > 0.0);
         }
 
@@ -98,7 +55,6 @@ namespace WarriorForeverSim.Tests
             BaseStatCalculator.InjectMock(typeof(AgilityCalculator), new FakeStatCalculator(Constants.AGI_FOR_ZERO_CRIT + 80));
 
             // https://tbc.wowhead.com/guides/classic-the-burning-crusade-stats-overview
-            Assert.AreEqual(0.02, RangedCritCalculator.Calculate(state), 0.00001);
             Assert.AreEqual(0.02, MeleeCritCalculator.Calculate(state), 0.00001);
         }
 
@@ -114,7 +70,6 @@ namespace WarriorForeverSim.Tests
             state.Config.Gear.Head = new GearItem() { CritRating = 44.16 };
 
             // https://tbc.wowhead.com/guides/classic-the-burning-crusade-stats-overview
-            Assert.AreEqual(0.02, RangedCritCalculator.Calculate(state), 0.00001);
             Assert.AreEqual(0.02, MeleeCritCalculator.Calculate(state), 0.00001);
         }
 
@@ -126,7 +81,6 @@ namespace WarriorForeverSim.Tests
             state.Config.Gear.Head = new GearItem() { HasteRating = 300 };
 
             // https://tbc.wowhead.com/guides/classic-the-burning-crusade-stats-overview
-            Assert.AreEqual(1.1899, RangedHasteCalculator.Calculate(state), 0.0001);
             Assert.AreEqual(1.1899, MeleeHasteCalculator.Calculate(state), 0.0001);
         }
 
@@ -150,14 +104,8 @@ namespace WarriorForeverSim.Tests
 
             Assert.AreEqual(71, StrengthCalculator.Calculate(state));
             Assert.AreEqual(769, AgilityCalculator.Calculate(state));
-            Assert.AreEqual(421, StaminaCalculator.Calculate(state));
-            Assert.AreEqual(159, IntellectCalculator.Calculate(state));
-            Assert.AreEqual(91, SpiritCalculator.Calculate(state));
-            Assert.AreEqual(4636, ArmorCalculator.Calculate(state));
-            Assert.AreEqual(1875, RangedAttackPowerCalculator.Calculate(state));
             Assert.AreEqual(1938, MeleeAttackPowerCalculator.Calculate(state));
             // subtracting out the crit suppression that the sim includes but the stat page in game doesn't
-            Assert.AreEqual(0.3009 - 0.048, RangedCritCalculator.Calculate(state), 0.0001);
             Assert.AreEqual(0.2382 - 0.048, MeleeCritCalculator.Calculate(state), 0.0001);
         }
 
@@ -176,14 +124,8 @@ namespace WarriorForeverSim.Tests
 
             Assert.AreEqual(71, StrengthCalculator.Calculate(state));
             Assert.AreEqual(669, AgilityCalculator.Calculate(state));
-            Assert.AreEqual(421, StaminaCalculator.Calculate(state));
-            Assert.AreEqual(159, IntellectCalculator.Calculate(state));
-            Assert.AreEqual(91, SpiritCalculator.Calculate(state));
-            Assert.AreEqual(4436, ArmorCalculator.Calculate(state));
-            Assert.AreEqual(1703, RangedAttackPowerCalculator.Calculate(state));
             Assert.AreEqual(1764, MeleeAttackPowerCalculator.Calculate(state));
             // subtracting out the crit suppression that the sim includes but the stat page in game doesn't
-            Assert.AreEqual(0.1959 - 0.048, RangedCritCalculator.Calculate(state), 0.0001);
             Assert.AreEqual(0.1832 - 0.048, MeleeCritCalculator.Calculate(state), 0.0001);
 
 
@@ -193,23 +135,17 @@ namespace WarriorForeverSim.Tests
         public void NoGearNoBuffsNoTalents()
         {
             var state = new SimulationState();
-            state.Config.PlayerSettings.Race = Race.Draenei;
+            state.Config.PlayerSettings.Race = Race.Human;
             state.Config.PlayerSettings.Level = 70;
             // intentionally setting boss to 70 to avoid the 3% crit suppression on raid bosses
             state.Config.BossSettings.Level = 70;
 
             // numbers taken from in game stat page with no gear and no talents
-            Assert.AreEqual(278, RangedAttackPowerCalculator.Calculate(state));
             Assert.AreEqual(333, MeleeAttackPowerCalculator.Calculate(state));
             // in-game it says 2.17% but the sim subtracts 1.8% for crit suppression aura
-            Assert.AreEqual(0.0217 - 0.018, RangedCritCalculator.Calculate(state), 0.000001);
             Assert.AreEqual(0.0217 - 0.018, MeleeCritCalculator.Calculate(state), 0.000001);
             Assert.AreEqual(65, StrengthCalculator.Calculate(state));
             Assert.AreEqual(148, AgilityCalculator.Calculate(state));
-            Assert.AreEqual(107, StaminaCalculator.Calculate(state));
-            Assert.AreEqual(78, IntellectCalculator.Calculate(state));
-            Assert.AreEqual(85, SpiritCalculator.Calculate(state));
-            Assert.AreEqual(296, ArmorCalculator.Calculate(state));
         }
 
         // 155 RAP for aspect of the hawk

@@ -340,31 +340,12 @@ namespace WarriorForeverSim.Tests.AbilityTests
             var zeroMock = new FakeStatCalculator(0.0);
 
             BaseStatCalculator.InjectMock(typeof(AgilityCalculator), zeroMock);
-            BaseStatCalculator.InjectMock(typeof(ArcaneResistanceCalculator), zeroMock);
-            BaseStatCalculator.InjectMock(typeof(ArmorCalculator), zeroMock);
-            BaseStatCalculator.InjectMock(typeof(RangedBonusDamageCalculator), zeroMock);
             BaseStatCalculator.InjectMock(typeof(DamageMultiplierCalculator), new FakeStatCalculator(1.0));
-            BaseStatCalculator.InjectMock(typeof(FireResistanceCalculator), zeroMock);
-            BaseStatCalculator.InjectMock(typeof(FrostResistanceCalculator), zeroMock);
-            BaseStatCalculator.InjectMock(typeof(HealthCalculator), zeroMock);
-            BaseStatCalculator.InjectMock(typeof(IntellectCalculator), zeroMock);
-            BaseStatCalculator.InjectMock(typeof(ManaCalculator), zeroMock);
             BaseStatCalculator.InjectMock(typeof(MeleeAttackPowerCalculator), zeroMock);
             BaseStatCalculator.InjectMock(typeof(MeleeCritCalculator), zeroMock);
             BaseStatCalculator.InjectMock(typeof(MeleeCritDamageMultiplierCalculator), new FakeStatCalculator(1.0));
             BaseStatCalculator.InjectMock(typeof(MeleeHasteCalculator), new FakeStatCalculator(1.0));
             BaseStatCalculator.InjectMock(typeof(MissChanceCalculator), zeroMock);
-            BaseStatCalculator.InjectMock(typeof(MovementSpeedCalculator), zeroMock);
-            BaseStatCalculator.InjectMock(typeof(MP5Calculator), zeroMock);
-            BaseStatCalculator.InjectMock(typeof(NatureResistanceCalculator), zeroMock);
-            BaseStatCalculator.InjectMock(typeof(RangedAttackPowerCalculator), zeroMock);
-            BaseStatCalculator.InjectMock(typeof(RangedCritCalculator), zeroMock);
-            BaseStatCalculator.InjectMock(typeof(RangedCritDamageMultiplierCalculator), new FakeStatCalculator(1.0));
-            BaseStatCalculator.InjectMock(typeof(RangedHasteCalculator), new FakeStatCalculator(1.0));
-            BaseStatCalculator.InjectMock(typeof(ShadowResistanceCalculator), zeroMock);
-            BaseStatCalculator.InjectMock(typeof(SpellCritCalculator), zeroMock);
-            BaseStatCalculator.InjectMock(typeof(SpiritCalculator), zeroMock);
-            BaseStatCalculator.InjectMock(typeof(StaminaCalculator), zeroMock);
             BaseStatCalculator.InjectMock(typeof(StrengthCalculator), zeroMock);
             BaseStatCalculator.InjectMock(typeof(WeaponSkillCalculator), new FakeStatCalculator(300));
         }

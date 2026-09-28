@@ -9,14 +9,13 @@ namespace WarriorForeverSim
             state.ProcessedEvents.Add(e);
             Console.WriteLine(e);
 
-            switch (e)
-            {
-                case AutoShotCompletedEvent ev:
-                    ImprovedAspectOfTheHawk.ProcessEvent(ev, state);
-                    ExposeWeakness.ProcessEvent(ev, state);
-                    MasterTactician.ProcessEvent(ev, state);
-                    break;
-            }
+            // switch (e)
+            // {
+            //     case AutoAttackSwingEvent ev:
+            //         ExposeWeakness.ProcessEvent(ev, state);
+            //         MasterTactician.ProcessEvent(ev, state);
+            //         break;
+            // }
         }
     }
 }

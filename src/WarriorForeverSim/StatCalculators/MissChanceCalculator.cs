@@ -18,11 +18,6 @@ namespace WarriorForeverSim
             missChance -= state.Config.Gear.GetAllGear().Sum(x => x.HitRating);
             missChance -= state.Config.Gear.GetAllEnchants().Sum(x => x.HitRating);
 
-            if (state.Config.Talents.TryGetValue(Talent.Surefooted, out var surefootedRank))
-            {
-                missChance -= surefootedRank * 0.01;
-            }
-
             missChance = Math.Max(missChance, 0.0);
 
             return missChance;

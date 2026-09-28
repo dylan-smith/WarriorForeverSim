@@ -34,11 +34,6 @@ stamina: 30
 intellect: 24
 ap: 40
 mp5: 4
-sockets:
-  red: 2
-  blue: 1
-  bonus:
-    agility: 4
 wowhead: 22436
 source: dungeon
 phase: 1
@@ -53,36 +48,8 @@ phase: 1
             Assert.AreEqual(24, result.Intellect);
             Assert.AreEqual(40, result.AttackPower);
             Assert.AreEqual(4, result.MP5);
-            Assert.AreEqual(2, result.Sockets.Count(s => s.Color == SocketColor.Red));
-            Assert.AreEqual(1, result.Sockets.Count(s => s.Color == SocketColor.Blue));
-            Assert.AreEqual(4, result.SocketBonus.Agility);
             Assert.AreEqual(22436, result.Wowhead);
             Assert.AreEqual(GearSource.Dungeon, result.Source);
-            Assert.AreEqual(1, result.Phase);
-        }
-
-        [TestMethod]
-        public void DeadlyFireOpal()
-        {
-            var yaml = @"
-name: Deadly Fire Opal
-color: orange
-ap: 8
-crit: 5
-unique: true
-wowhead: 30582
-source: heroic
-phase: 1";
-
-            var result = GearItemFactory.LoadGearItem(yaml, GearType.Gem);
-            Assert.AreEqual(GearType.Gem, result.GearType);
-            Assert.AreEqual("Deadly Fire Opal", result.Name);
-            Assert.AreEqual(GemColor.Orange, result.Color);
-            Assert.AreEqual(8, result.AttackPower);
-            Assert.AreEqual(5, result.CritRating);
-            Assert.IsTrue(result.Unique);
-            Assert.AreEqual(30582, result.Wowhead);
-            Assert.AreEqual(GearSource.Heroic, result.Source);
             Assert.AreEqual(1, result.Phase);
         }
 
@@ -153,18 +120,9 @@ two-handed-mace-skill: 40
 two-handed-sword-skill: 41
 wand-skill: 42
 
-sockets:
-  red: 3
-  blue: 7
-  yellow: 1
-  meta: 1
-  bonus:
-    gun-skill: 3
-    spirit: 7
-    rangedbonusdmg: 17
 wowhead: 123987
 phase: 1
-source: gruul
+source: naxx
 ";
 
             var result = GearItemFactory.LoadGearItem(yaml, GearType.Head);
@@ -217,17 +175,7 @@ source: gruul
 
             Assert.AreEqual(123987, result.Wowhead);
             Assert.AreEqual(1, result.Phase);
-            Assert.AreEqual(GearSource.Gruul, result.Source);
-
-            Assert.AreEqual(12, result.Sockets.Count);
-            Assert.AreEqual(3, result.Sockets.Count(s => s.Color == SocketColor.Red));
-            Assert.AreEqual(7, result.Sockets.Count(s => s.Color == SocketColor.Blue));
-            Assert.AreEqual(1, result.Sockets.Count(s => s.Color == SocketColor.Yellow));
-            Assert.AreEqual(1, result.Sockets.Count(s => s.Color == SocketColor.Meta));
-
-            Assert.AreEqual(3, result.SocketBonus.WeaponSkill[WeaponType.Gun]);
-            Assert.AreEqual(7, result.SocketBonus.Spirit);
-            Assert.AreEqual(17, result.SocketBonus.RangedBonusDamage);
+            Assert.AreEqual(GearSource.Naxxramas, result.Source);
         }
     }
 }

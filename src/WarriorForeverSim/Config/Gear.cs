@@ -135,15 +135,10 @@ namespace WarriorForeverSim
             return GetAllGear().Where(x => x.Enchant != null).Select(x => x.Enchant).ToList();
         }
 
-        public IEnumerable<GearItem> GetAllGems()
-        {
-            return GetAllGear().SelectMany(g => g.Sockets.Select(s => s.Gem)).Where(g => g != null).ToList();
-        }
-
         public double GetStatTotal(Func<GearItem, double> stat)
         {
-            var result = GetAllGear().Sum(g => g.GetStatWithSockets(stat));
-            result += GetAllEnchants().Sum(e => e.GetStatWithSockets(stat));
+            var result = GetAllGear().Sum(g => stat(g));
+            result += GetAllEnchants().Sum(e => stat(e));
 
             return result;
         }

@@ -47,33 +47,15 @@ namespace WarriorForeverSim
                 warnings.Add(SimulationWarnings.PlayerNotMaxLevel);
             }
 
-            if (!ValidateMissingRangedWeapon())
+            if (!ValidateMissingMainHandWeapon())
             {
-                errors.Add(SimulationErrors.MissingRangedWeapon);
-            }
-
-            if (!ValidateTooManyMetaGems())
-            {
-                warnings.Add(SimulationWarnings.TooManyMetaGems);
-            }
-
-            if (!ValidateMetaGemInNonMetaSocket())
-            {
-                warnings.Add(SimulationWarnings.CantPutMetaGemInNonMetaSocket);
-            }
-
-            if (!ValidateNonMetaGemInMetaSocket())
-            {
-                warnings.Add(SimulationWarnings.CantPutNonMetaGemInMetaSocket);
+                errors.Add(SimulationErrors.MissingMainHandWeapon);
             }
 
             return (warnings, errors);
         }
 
-        private bool ValidateNonMetaGemInMetaSocket() => !Gear.GetAllGear().SelectMany(g => g.Sockets).Any(s => s.Color == SocketColor.Meta && s.Gem != null && s.Gem.Color != GemColor.Meta);
-        private bool ValidateMetaGemInNonMetaSocket() => !Gear.GetAllGear().SelectMany(g => g.Sockets).Any(s => s.Gem != null && s.Gem.Color == GemColor.Meta && s.Color != SocketColor.Meta);
-        private bool ValidateTooManyMetaGems() => Gear.GetAllGems().Count(x => x.Color == GemColor.Meta) <= 1;
-        private bool ValidateMissingRangedWeapon() => Gear.Ranged != null;
+        private bool ValidateMissingMainHandWeapon() => Gear.MainHand != null;
 
         private bool ValidatePlayerMaxLevel() => PlayerSettings.Level == 70;
 

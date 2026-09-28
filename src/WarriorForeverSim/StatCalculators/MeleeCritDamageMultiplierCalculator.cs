@@ -20,11 +20,6 @@
                 dmgMultiplier += (0.01 * humanoidSlayingRank);
             }
 
-            if (state.Auras.Contains(Aura.RelentlessEarthstormDiamond))
-            {
-                dmgMultiplier += 0.03;
-            }
-
             return dmgMultiplier;
         }
     }
