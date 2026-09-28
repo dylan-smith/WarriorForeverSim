@@ -9,25 +9,19 @@
             var bossType = state.Config.BossSettings.BossType;
             var damageMultiplier = 1.0;
 
-            if (state.Config.Talents.ContainsKey(Talent.MonsterSlaying))
+            if (state.Config.Talents.TryGetValue(Talent.MonsterSlaying, out var monsterSlayingRank) && (bossType == BossType.Beast || bossType == BossType.Giant || bossType == BossType.Dragonkin))
             {
-                if (bossType == BossType.Beast || bossType == BossType.Giant || bossType == BossType.Dragonkin)
-                {
-                    damageMultiplier *= 1 + (0.01 * state.Config.Talents[Talent.MonsterSlaying]);
-                }
+                damageMultiplier *= 1 + (0.01 * monsterSlayingRank);
             }
 
-            if (state.Config.Talents.ContainsKey(Talent.HumanoidSlaying))
+            if (state.Config.Talents.TryGetValue(Talent.HumanoidSlaying, out var humanoidSlayingRank) && bossType == BossType.Humanoid)
             {
-                if (bossType == BossType.Humanoid)
-                {
-                    damageMultiplier *= 1 + (0.01 * state.Config.Talents[Talent.HumanoidSlaying]);
-                }
+                damageMultiplier *= 1 + (0.01 * humanoidSlayingRank);
             }
 
-            if (state.Config.Talents.ContainsKey(Talent.FocusedFire))
+            if (state.Config.Talents.TryGetValue(Talent.FocusedFire, out var focusedFireRank))
             {
-                damageMultiplier *= 1 + (0.01 * state.Config.Talents[Talent.FocusedFire]);
+                damageMultiplier *= 1 + (0.01 * focusedFireRank);
             }
 
             if (state.Auras.Contains(Aura.TheBeastWithin))

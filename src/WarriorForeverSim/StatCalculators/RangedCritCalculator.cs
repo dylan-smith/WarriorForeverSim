@@ -11,9 +11,9 @@ namespace WarriorForeverSim
             var critChance = CritCalculator.Calculate(state);
             critChance += state.Config.Gear.GetStatTotal(x => x.RangedCritRating) / 2208; // 22.08 rating = 1% crit (at level 70)
 
-            if (state.Config.Talents.ContainsKey(Talent.LethalShots))
+            if (state.Config.Talents.TryGetValue(Talent.LethalShots, out var lethalShotsRank))
             {
-                critChance += state.Config.Talents[Talent.LethalShots] * 0.01;
+                critChance += lethalShotsRank * 0.01;
             }
 
             // TODO: Trolls get 1% crit with bow racial

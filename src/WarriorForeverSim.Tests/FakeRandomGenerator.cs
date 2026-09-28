@@ -15,20 +15,15 @@ namespace WarriorForeverSim.Tests
 
         public void SetRolls(RollType type, params double[] values)
         {
-            if (_typeValues.ContainsKey(type))
-            {
-                _typeValues.Remove(type);
-            }
-
-            _typeValues.Add(type, values);
+            _typeValues[type] = values;
         }
 
         protected override double RollImplementation(RollType type)
         {
-            if (_typeValues.ContainsKey(type) && _typeValues[type].Any())
+            if (_typeValues.TryGetValue(type, out var typeRolls) && typeRolls.Any())
             {
-                var result = _typeValues[type].First();
-                _typeValues[type] = _typeValues[type].SkipLast(1).ToArray();
+                var result = typeRolls.First();
+                _typeValues[type] = typeRolls.Skip(1).ToArray();
                 return result;
             }
 

@@ -11,7 +11,7 @@
             var weaponType = weapon.WeaponType;
 
             // TODO: Need to test this
-            skill += (int)state.Config.Gear.GetStatTotal(x => x.WeaponSkill.ContainsKey(weaponType) ? x.WeaponSkill[weaponType] : 0.0);
+            skill += (int)state.Config.Gear.GetStatTotal(x => x.WeaponSkill.TryGetValue(weaponType, out var skill) ? skill : 0.0);
 
             if (weaponType == WeaponType.Gun && state.Config.PlayerSettings.Race == Race.Dwarf)
             {

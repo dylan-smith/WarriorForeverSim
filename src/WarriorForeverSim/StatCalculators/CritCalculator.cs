@@ -19,9 +19,9 @@
                 critChance += 0.05;
             }
 
-            if (state.Config.Talents.ContainsKey(Talent.KillerInstinct))
+            if (state.Config.Talents.TryGetValue(Talent.KillerInstinct, out var killerInstinctRank))
             {
-                critChance += state.Config.Talents[Talent.KillerInstinct] * 0.01;
+                critChance += killerInstinctRank * 0.01;
             }
 
             if (state.Auras.Contains(Aura.MasterTactician))

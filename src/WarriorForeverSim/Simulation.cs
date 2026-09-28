@@ -35,7 +35,7 @@ namespace WarriorForeverSim
                     return State;
                 }
 
-                while (nextEvent != null && nextEvent.Timestamp == State.CurrentTime)
+                while (nextEvent != null && nextEvent.Timestamp <= State.CurrentTime)
                 {
                     State.Events.Remove(nextEvent);
                     nextEvent.ProcessEvent(State);

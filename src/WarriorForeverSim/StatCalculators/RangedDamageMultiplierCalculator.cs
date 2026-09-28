@@ -8,9 +8,9 @@
         {
             var damageMultiplier = DamageMultiplierCalculator.Calculate(state);
 
-            if (state.Config.Talents.ContainsKey(Talent.RangedWeaponSpecialization))
+            if (state.Config.Talents.TryGetValue(Talent.RangedWeaponSpecialization, out var rangedWeaponSpecializationRank))
             {
-                damageMultiplier += 0.01 * state.Config.Talents[Talent.RangedWeaponSpecialization];
+                damageMultiplier += 0.01 * rangedWeaponSpecializationRank;
             }
 
             return damageMultiplier;

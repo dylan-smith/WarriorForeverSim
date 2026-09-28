@@ -12,9 +12,9 @@
             {
                 movementSpeed += 0.3;
 
-                if (state.Config.Talents.ContainsKey(Talent.Pathfinding))
+                if (state.Config.Talents.TryGetValue(Talent.Pathfinding, out var pathfindingRank))
                 {
-                    movementSpeed += 0.04 * state.Config.Talents[Talent.Pathfinding];
+                    movementSpeed += 0.04 * pathfindingRank;
                 }
             }
 

@@ -10,9 +10,9 @@
             // https://classic.wowhead.com/guide=10453/classic-spell-power-hunter-the-little-arcane-shot-that-could
             var spellCrit = 0.0;
 
-            if (state.Config.Talents.ContainsKey(Talent.KillerInstinct))
+            if (state.Config.Talents.TryGetValue(Talent.KillerInstinct, out var killerInstinctRank))
             {
-                spellCrit += state.Config.Talents[Talent.KillerInstinct] * 0.01;
+                spellCrit += killerInstinctRank * 0.01;
             }
 
             return spellCrit;

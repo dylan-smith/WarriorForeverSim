@@ -325,15 +325,18 @@ namespace WarriorForeverSim
             var assemblyPath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
             var schemaPath = Path.Join(assemblyPath, "Config", "GearItem-Schema.json");
             var schemaJson = File.ReadAllText(schemaPath);
-            var schema = JSchema.Load(new JsonTextReader(new StringReader(schemaJson)));
+            using var schemaReader = new StringReader(schemaJson);
+            using var schemaJsonReader = new JsonTextReader(schemaReader);
+            var schema = JSchema.Load(schemaJsonReader);
 
             var deserializer = new DeserializerBuilder()
                                    .WithNodeTypeResolver(new InferTypeFromValue())
                                    .Build();
-            var data = deserializer.Deserialize(new StringReader(yaml));
+            using var yamlReader = new StringReader(yaml);
+            var data = deserializer.Deserialize(yamlReader);
 
             var sb = new StringBuilder();
-            var sw = new StringWriter(sb);
+            using var sw = new StringWriter(sb);
 
             var serializer = new JsonSerializer();
             serializer.Serialize(sw, data);

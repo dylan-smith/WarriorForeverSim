@@ -11,23 +11,16 @@ namespace WarriorForeverSim
         {
             var bossDefense = state.Config.BossSettings.Defense;
             var weaponSkill = WeaponSkillCalculator.Calculate(weapon, state);
-            double missChance;
-
-            if (bossDefense - weaponSkill > 10)
-            {
-                missChance = 0.07 + ((bossDefense - weaponSkill - 10) * 0.004);
-            }
-            else
-            {
-                missChance = 0.05 + ((bossDefense - weaponSkill) * 0.001);
-            }
+            var missChance = bossDefense - weaponSkill > 10
+                ? 0.07 + ((bossDefense - weaponSkill - 10) * 0.004)
+                : 0.05 + ((bossDefense - weaponSkill) * 0.001);
 
             missChance -= state.Config.Gear.GetAllGear().Sum(x => x.HitRating);
             missChance -= state.Config.Gear.GetAllEnchants().Sum(x => x.HitRating);
 
-            if (state.Config.Talents.ContainsKey(Talent.Surefooted))
+            if (state.Config.Talents.TryGetValue(Talent.Surefooted, out var surefootedRank))
             {
-                missChance -= state.Config.Talents[Talent.Surefooted] * 0.01;
+                missChance -= surefootedRank * 0.01;
             }
 
             missChance = Math.Max(missChance, 0.0);

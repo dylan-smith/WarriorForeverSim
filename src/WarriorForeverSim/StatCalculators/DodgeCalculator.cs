@@ -20,15 +20,15 @@
             {
                 dodge += 0.08;
 
-                if (state.Config.Talents.ContainsKey(Talent.ImprovedAspectOfTheMonkey))
+                if (state.Config.Talents.TryGetValue(Talent.ImprovedAspectOfTheMonkey, out var improvedAspectOfTheMonkeyRank))
                 {
-                    dodge += 0.02 * state.Config.Talents[Talent.ImprovedAspectOfTheMonkey];
+                    dodge += 0.02 * improvedAspectOfTheMonkeyRank;
                 }
             }
 
-            if (state.Config.Talents.ContainsKey(Talent.CatlikeReflexes))
+            if (state.Config.Talents.TryGetValue(Talent.CatlikeReflexes, out var catlikeReflexesRank))
             {
-                dodge += 0.01 * state.Config.Talents[Talent.CatlikeReflexes];
+                dodge += 0.01 * catlikeReflexesRank;
             }
 
             // TODO: Defense increases dodge also (25 def == 1% dodge)
