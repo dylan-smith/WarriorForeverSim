@@ -6,9 +6,10 @@ on:
   pull_request:
     branches: [ main ]
   workflow_dispatch:
-  # Weekly CodeQL run so new security queries are applied to main even without pushes.
+  # Nightly run of the full pipeline, including CodeQL, so new security queries are
+  # applied to main even without pushes.
   schedule:
-    - cron: "0 6 * * 1"
+    - cron: "0 6 * * *"
 
 env:
   DOTNET_NOLOGO: true
@@ -18,7 +19,6 @@ env:
 jobs:
   lint:
     name: Lint
-    if: github.event_name != 'schedule'
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -44,7 +44,6 @@ jobs:
 
   build:
     name: Build and Test
-    if: github.event_name != 'schedule'
     runs-on: ubuntu-latest
     permissions:
       contents: read
