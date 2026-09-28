@@ -2,6 +2,7 @@
 {
     public enum Aura
     {
+        SwingTimerCooldown,
         AutoShotOnCooldown,
         GlobalCooldown,
         AspectOfTheHawk,
