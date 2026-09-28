@@ -44,15 +44,15 @@
                 agility += 20;
             }
 
-            if (state.Config.Talents.ContainsKey(Talent.LightningReflexes))
+            if (state.Config.Talents.TryGetValue(Talent.LightningReflexes, out var lightningReflexesRank))
             {
-                agility *= 1 + (state.Config.Talents[Talent.LightningReflexes] * 0.03);
+                agility *= 1 + (lightningReflexesRank * 0.03);
                 agility = agility.Floor();
             }
 
-            if (state.Config.Talents.ContainsKey(Talent.CombatExperience))
+            if (state.Config.Talents.TryGetValue(Talent.CombatExperience, out var combatExperienceRank))
             {
-                agility *= 1 + (0.01 * state.Config.Talents[Talent.CombatExperience]);
+                agility *= 1 + (0.01 * combatExperienceRank);
                 agility = agility.Floor();
             }
 

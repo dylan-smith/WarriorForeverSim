@@ -9,14 +9,14 @@
             var health = state.Config.PlayerSettings.Health;
             health += StaminaCalculator.Calculate(state) * 10;
 
-            if (state.Config.Talents.ContainsKey(Talent.EnduranceTraining))
+            if (state.Config.Talents.TryGetValue(Talent.EnduranceTraining, out var enduranceTrainingRank))
             {
-                health *= 1 + (state.Config.Talents[Talent.EnduranceTraining] * 0.01);
+                health *= 1 + (enduranceTrainingRank * 0.01);
             }
 
-            if (state.Config.Talents.ContainsKey(Talent.Survivalist))
+            if (state.Config.Talents.TryGetValue(Talent.Survivalist, out var survivalistRank))
             {
-                health *= 1 + (state.Config.Talents[Talent.Survivalist] * 0.02);
+                health *= 1 + (survivalistRank * 0.02);
             }
 
             return health;

@@ -96,7 +96,7 @@ phase: 1";
         [TestMethod]
         public void ValidateAllYamlFiles()
         {
-            var _ = GearItemFactory.AllGear;
+            Assert.IsNotNull(GearItemFactory.AllGear);
         }
 
         [TestMethod]

@@ -15,9 +15,9 @@
                 haste += 0.03 * state.Config.Talents[Talent.ImprovedAspectOfTheHawk];
             }
 
-            if (state.Config.Talents.ContainsKey(Talent.SerpentsSwiftness))
+            if (state.Config.Talents.TryGetValue(Talent.SerpentsSwiftness, out var serpentsSwiftnessRank))
             {
-                haste += 0.04 * state.Config.Talents[Talent.SerpentsSwiftness];
+                haste += 0.04 * serpentsSwiftnessRank;
             }
 
             return haste;

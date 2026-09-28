@@ -17,22 +17,22 @@
                 rangedAP += 155;
             }
 
-            if (state.Config.Talents.ContainsKey(Talent.CarefulAim))
+            if (state.Config.Talents.TryGetValue(Talent.CarefulAim, out var carefulAimRank))
             {
                 var intellect = IntellectCalculator.Calculate(state);
-                rangedAP += intellect * (0.15 * state.Config.Talents[Talent.CarefulAim]);
+                rangedAP += intellect * (0.15 * carefulAimRank);
                 rangedAP = rangedAP.Floor();
             }
 
-            if (state.Config.Talents.ContainsKey(Talent.MasterMarksman))
+            if (state.Config.Talents.TryGetValue(Talent.MasterMarksman, out var masterMarksmanRank))
             {
-                rangedAP *= 1 + (0.02 * state.Config.Talents[Talent.MasterMarksman]);
+                rangedAP *= 1 + (0.02 * masterMarksmanRank);
                 rangedAP = rangedAP.Floor();
             }
 
-            if (state.Config.Talents.ContainsKey(Talent.SurvivalInstincts))
+            if (state.Config.Talents.TryGetValue(Talent.SurvivalInstincts, out var survivalInstinctsRank))
             {
-                rangedAP *= 1 + (0.02 * state.Config.Talents[Talent.SurvivalInstincts]);
+                rangedAP *= 1 + (0.02 * survivalInstinctsRank);
                 rangedAP = rangedAP.Floor();
             }
 

@@ -24,9 +24,9 @@
                 meleeAP += 381;
             }
 
-            if (state.Config.Talents.ContainsKey(Talent.SurvivalInstincts))
+            if (state.Config.Talents.TryGetValue(Talent.SurvivalInstincts, out var survivalInstinctsRank))
             {
-                meleeAP *= 1 + (0.02 * state.Config.Talents[Talent.SurvivalInstincts]);
+                meleeAP *= 1 + (0.02 * survivalInstinctsRank);
                 meleeAP = meleeAP.Floor();
             }
 
@@ -34,9 +34,9 @@
             {
                 meleeAP += 110;
             }
-            else if (state.Config.Talents.ContainsKey(Talent.ImprovedHuntersMark))
+            else if (state.Config.Talents.TryGetValue(Talent.ImprovedHuntersMark, out var improvedHuntersMarkRank))
             {
-                meleeAP += (110 * (0.2 * state.Config.Talents[Talent.ImprovedHuntersMark])).Floor();
+                meleeAP += (110 * (0.2 * improvedHuntersMarkRank)).Floor();
             }
 
             return meleeAP;

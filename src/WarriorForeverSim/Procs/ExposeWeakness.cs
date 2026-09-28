@@ -11,9 +11,9 @@
                 return;
             }
 
-            if (state.Config.Talents.ContainsKey(Talent.ExposeWeakness))
+            if (state.Config.Talents.TryGetValue(Talent.ExposeWeakness, out var exposeWeaknessRank))
             {
-                var procChance = state.Config.Talents[Talent.ExposeWeakness] / 3.0;
+                var procChance = exposeWeaknessRank / 3.0;
 
                 var roll = RandomGenerator.Roll(RollType.ExposeWeaknessProc);
 

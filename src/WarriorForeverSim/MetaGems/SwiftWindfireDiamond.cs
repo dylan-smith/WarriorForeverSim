@@ -18,12 +18,10 @@ namespace WarriorForeverSim.MetaGems
             var purple = state.Config.Gear.GetAllGems().Count(g => g.Color == GemColor.Purple);
             var green = state.Config.Gear.GetAllGems().Count(g => g.Color == GemColor.Green);
             var red = state.Config.Gear.GetAllGems().Count(g => g.Color == GemColor.Red);
-            var blue = state.Config.Gear.GetAllGems().Count(g => g.Color == GemColor.Blue);
             var yellow = state.Config.Gear.GetAllGems().Count(g => g.Color == GemColor.Yellow);
 
             red += orange + purple;
             yellow += orange + green;
-            blue += purple + green;
 
             if (yellow < 2 || red < 1)
             {

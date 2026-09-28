@@ -9,27 +9,21 @@
             var bossType = state.Config.BossSettings.BossType;
             var critMultiplier = 1.0;
 
-            if (state.Config.Talents.ContainsKey(Talent.MonsterSlaying))
+            if (state.Config.Talents.TryGetValue(Talent.MonsterSlaying, out var monsterSlayingRank) && (bossType == BossType.Beast || bossType == BossType.Giant || bossType == BossType.Dragonkin))
             {
-                if (bossType == BossType.Beast || bossType == BossType.Giant || bossType == BossType.Dragonkin)
-                {
-                    critMultiplier += (0.01 * state.Config.Talents[Talent.MonsterSlaying]);
-                }
+                critMultiplier += (0.01 * monsterSlayingRank);
             }
 
-            if (state.Config.Talents.ContainsKey(Talent.HumanoidSlaying))
+            if (state.Config.Talents.TryGetValue(Talent.HumanoidSlaying, out var humanoidSlayingRank) && bossType == BossType.Humanoid)
             {
-                if (bossType == BossType.Humanoid)
-                {
-                    critMultiplier += (0.01 * state.Config.Talents[Talent.HumanoidSlaying]);
-                }
+                critMultiplier += (0.01 * humanoidSlayingRank);
             }
 
-            if (state.Config.Talents.ContainsKey(Talent.MortalShots))
+            if (state.Config.Talents.TryGetValue(Talent.MortalShots, out var mortalShotsRank))
             {
                 // Mortal shots only increases the BONUS crit damage by 6%, so overall damage is multiplied by 0.03
                 // TODO: not sure if that is actually how the math is supposed to work
-                critMultiplier += state.Config.Talents[Talent.MortalShots] * 0.03;
+                critMultiplier += mortalShotsRank * 0.03;
             }
 
             if (state.Auras.Contains(Aura.RelentlessEarthstormDiamond))
