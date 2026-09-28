@@ -2,6 +2,8 @@
 {
     public enum RollType
     {
+        MeleeMiss,
+        MeleeCrit,
         AutoShotMiss,
         AutoShotCrit,
         ImprovedAspectOfTheHawkProc,
