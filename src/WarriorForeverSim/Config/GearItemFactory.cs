@@ -1,12 +1,12 @@
-﻿using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-using Newtonsoft.Json.Schema;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using Newtonsoft.Json.Schema;
 using YamlDotNet.Core.Events;
 using YamlDotNet.RepresentationModel;
 using YamlDotNet.Serialization;
@@ -160,7 +160,7 @@ namespace WarriorForeverSim
         public static GearItem Load(string itemName) => GetItem(AllGear, itemName);
 
         public static GearItem LoadAmmo(string itemName) => GetItem(AllAmmo, itemName);
-        
+
         public static GearItem LoadBack(string itemName) => GetItem(AllBack, itemName);
 
         public static GearItem LoadChest(string itemName) => GetItem(AllChest, itemName);
@@ -266,7 +266,7 @@ namespace WarriorForeverSim
 
             _allGear = _allGear.ToList();
             _allEnchants = _allEnchants.ToList();
-            
+
             var gems = LoadAllFromDir(gemsPath, GearType.Gem).ToList();
             gems.AddRange(LoadAllMetaGems());
             _allGems = gems;

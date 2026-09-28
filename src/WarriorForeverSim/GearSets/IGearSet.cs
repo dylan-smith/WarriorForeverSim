@@ -2,6 +2,6 @@
 {
     public interface IGearSet
     {
-        public void Apply(SimulationState state);
+        void Apply(SimulationState state);
     }
 }

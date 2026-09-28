@@ -1,7 +1,7 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Newtonsoft.Json.Schema;
-using System;
+﻿using System;
 using System.Linq;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Newtonsoft.Json.Schema;
 
 namespace WarriorForeverSim.Tests
 {
@@ -214,7 +214,7 @@ source: gruul
             Assert.AreEqual(40.0, result.WeaponSkill[WeaponType.TwoHandedMace]);
             Assert.AreEqual(41.0, result.WeaponSkill[WeaponType.TwoHandedSword]);
             Assert.AreEqual(42.0, result.WeaponSkill[WeaponType.Wand]);
-            
+
             Assert.AreEqual(123987, result.Wowhead);
             Assert.AreEqual(1, result.Phase);
             Assert.AreEqual(GearSource.Gruul, result.Source);

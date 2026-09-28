@@ -13,6 +13,31 @@ env:
   DOTNET_SKIP_FIRST_TIME_EXPERIENCE: true
 
 jobs:
+  lint:
+    name: Lint
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+
+    steps:
+    - uses: actions/checkout@v7
+
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v6
+      with:
+        dotnet-version: 10.0.x
+
+    - name: Restore
+      run: dotnet restore WarriorForeverSim.sln
+      working-directory: src
+
+    # Fails if any file would be changed by `dotnet format`, i.e. if any formatting,
+    # code-style, or naming rule in .editorconfig at warning severity or above is
+    # violated. Run `dotnet format WarriorForeverSim.sln` locally to fix.
+    - name: Check code style
+      run: dotnet format WarriorForeverSim.sln --no-restore --verify-no-changes --severity warn
+      working-directory: src
+
   build:
     name: Build and Test
     runs-on: ubuntu-latest

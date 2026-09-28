@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace WarriorForeverSim
+﻿namespace WarriorForeverSim
 {
     public class CritCalculator : BaseStatCalculator
     {

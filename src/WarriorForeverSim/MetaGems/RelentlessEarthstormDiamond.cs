@@ -32,7 +32,7 @@ namespace WarriorForeverSim.MetaGems
                 return;
             }
 
-            this.Agility = 12;
+            Agility = 12;
 
             state.Auras.Add(Aura.RelentlessEarthstormDiamond);
         }

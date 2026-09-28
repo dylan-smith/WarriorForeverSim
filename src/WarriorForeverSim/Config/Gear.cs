@@ -29,25 +29,100 @@ namespace WarriorForeverSim
 
         public IEnumerable<GearItem> GetAllGear()
         {
-            if (Head != null) yield return Head;
-            if (Neck != null) yield return Neck;
-            if (Shoulder != null) yield return Shoulder;
-            if (Back != null) yield return Back;
-            if (Chest != null) yield return Chest;
-            if (Wrist != null) yield return Wrist;
-            if (MainHand != null) yield return MainHand;
-            if (OffHand != null) yield return OffHand;
-            if (Hands != null) yield return Hands;
-            if (Waist != null) yield return Waist;
-            if (Legs != null) yield return Legs;
-            if (Feet != null) yield return Feet;
-            if (Finger1 != null) yield return Finger1;
-            if (Finger2 != null) yield return Finger2;
-            if (Trinket1 != null) yield return Trinket1;
-            if (Trinket2 != null) yield return Trinket2;
-            if (Ranged != null) yield return Ranged;
-            if (Ammo != null) yield return Ammo;
-            if (Quiver != null) yield return Quiver;
+            if (Head != null)
+            {
+                yield return Head;
+            }
+
+            if (Neck != null)
+            {
+                yield return Neck;
+            }
+
+            if (Shoulder != null)
+            {
+                yield return Shoulder;
+            }
+
+            if (Back != null)
+            {
+                yield return Back;
+            }
+
+            if (Chest != null)
+            {
+                yield return Chest;
+            }
+
+            if (Wrist != null)
+            {
+                yield return Wrist;
+            }
+
+            if (MainHand != null)
+            {
+                yield return MainHand;
+            }
+
+            if (OffHand != null)
+            {
+                yield return OffHand;
+            }
+
+            if (Hands != null)
+            {
+                yield return Hands;
+            }
+
+            if (Waist != null)
+            {
+                yield return Waist;
+            }
+
+            if (Legs != null)
+            {
+                yield return Legs;
+            }
+
+            if (Feet != null)
+            {
+                yield return Feet;
+            }
+
+            if (Finger1 != null)
+            {
+                yield return Finger1;
+            }
+
+            if (Finger2 != null)
+            {
+                yield return Finger2;
+            }
+
+            if (Trinket1 != null)
+            {
+                yield return Trinket1;
+            }
+
+            if (Trinket2 != null)
+            {
+                yield return Trinket2;
+            }
+
+            if (Ranged != null)
+            {
+                yield return Ranged;
+            }
+
+            if (Ammo != null)
+            {
+                yield return Ammo;
+            }
+
+            if (Quiver != null)
+            {
+                yield return Quiver;
+            }
 
             foreach (var x in Other)
             {

@@ -1,5 +1,4 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
 
 namespace WarriorForeverSim.Tests
 {
@@ -187,7 +186,7 @@ namespace WarriorForeverSim.Tests
             Assert.AreEqual(0.1959 - 0.048, RangedCritCalculator.Calculate(state), 0.0001);
             Assert.AreEqual(0.1832 - 0.048, MeleeCritCalculator.Calculate(state), 0.0001);
 
-            
+
         }
 
         [TestMethod]
