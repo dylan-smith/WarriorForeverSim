@@ -32,7 +32,7 @@ namespace WarriorForeverSim.MetaGems
                 return;
             }
 
-            this.AttackPower = 20;
+            AttackPower = 20;
             // TODO: minor run speed increase
         }
     }

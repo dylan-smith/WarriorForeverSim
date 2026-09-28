@@ -32,7 +32,7 @@ namespace WarriorForeverSim.MetaGems
                 return;
             }
 
-            this.CritRating = 12;
+            CritRating = 12;
         }
     }
 }

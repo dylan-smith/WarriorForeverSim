@@ -1,9 +1,6 @@
-﻿using WarriorForeverSim.MetaGems;
+﻿using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using WarriorForeverSim.MetaGems;
 
 namespace WarriorForeverSim.Tests.MetaGemTests
 {
