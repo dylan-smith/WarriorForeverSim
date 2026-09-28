@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project
 
-A discrete-event combat simulator for a WoW TBC (level 70) hunter, despite the repo name. C# on .NET 10, MSTest. Solution and both projects live under `src/`; `Program.cs` is still a placeholder, so the library and its tests are the real product.
+A discrete-event combat simulator for a warrior in World of Warcraft Forever. The code was copied from a WoW TBC hunter simulator and still contains hunter-specific content (Auto Shot, aspects, hunter talents and procs, ranged stat calculators, hunter gear data). That content is being replaced with warrior equivalents; treat it as scaffolding to convert, not as the target design, and do not add new hunter-specific code. C# on .NET 10, MSTest. Solution and both projects live under `src/`; `Program.cs` is still a placeholder, so the library and its tests are the real product.
 
 ## Commands
 
