@@ -106,7 +106,7 @@ jobs:
     # The glob is one level deep on purpose: coverlet also leaves a copy of the file in a
     # per-host subfolder, and ** would load both.
     - name: Generate coverage report
-      uses: danielpalme/ReportGenerator-GitHub-Action@v5
+      uses: danielpalme/ReportGenerator-GitHub-Action@d3ebf1f760f7d8ab92cc44d9bcfee7ad73722a31 # 5.5.11
       if: always() && steps.test.outcome != 'skipped'
       with:
         reports: test-results/*/coverage.cobertura.xml
@@ -125,7 +125,7 @@ jobs:
     # Sticky comment: one comment per PR, updated in place on every push instead of
     # adding a new one. Skipped for fork PRs, which get a read-only token.
     - name: Comment coverage on PR
-      uses: marocchino/sticky-pull-request-comment@v3
+      uses: marocchino/sticky-pull-request-comment@5770ad5eb8f42dd2c4f34da00c94c5381e49af88 # v3.0.5
       if: >
         always() && steps.test.outcome != 'skipped'
         && github.event_name == 'pull_request'
