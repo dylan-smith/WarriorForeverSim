@@ -6,6 +6,10 @@ on:
   pull_request:
     branches: [ main ]
   workflow_dispatch:
+  # Nightly run of the full pipeline, including CodeQL, so new security queries are
+  # applied to main even without pushes.
+  schedule:
+    - cron: "0 6 * * *"
 
 env:
   DOTNET_NOLOGO: true
@@ -45,6 +49,8 @@ jobs:
       contents: read
       checks: write
       pull-requests: write
+      actions: read
+      security-events: write
 
     steps:
     - uses: actions/checkout@v7
@@ -58,9 +64,23 @@ jobs:
       run: dotnet restore WarriorForeverSim.sln
       working-directory: src
 
+    # CodeQL traces the build below to extract the C# code, so the project only needs
+    # to be compiled once for both testing and scanning.
+    - name: Initialize CodeQL
+      uses: github/codeql-action/init@v4
+      with:
+        languages: csharp
+        build-mode: manual
+        queries: security-and-quality
+
     - name: Build
       run: dotnet build WarriorForeverSim.sln --configuration Release --no-restore
       working-directory: src
+
+    - name: Perform CodeQL Analysis
+      uses: github/codeql-action/analyze@v4
+      with:
+        category: /language:csharp
 
     - name: Test
       run: >
@@ -85,3 +105,27 @@ jobs:
       with:
         name: test-results
         path: test-results/
+
+  # Scans the workflow files under .github/workflows themselves. No build is needed.
+  codeql-actions:
+    name: CodeQL (actions)
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      actions: read
+      security-events: write
+
+    steps:
+    - uses: actions/checkout@v7
+
+    - name: Initialize CodeQL
+      uses: github/codeql-action/init@v4
+      with:
+        languages: actions
+        build-mode: none
+        queries: security-and-quality
+
+    - name: Perform CodeQL Analysis
+      uses: github/codeql-action/analyze@v4
+      with:
+        category: /language:actions
