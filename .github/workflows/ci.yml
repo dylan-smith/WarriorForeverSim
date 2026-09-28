@@ -83,6 +83,7 @@ jobs:
         category: /language:csharp
 
     - name: Test
+      id: test
       run: >
         dotnet test WarriorForeverSim.sln
         --configuration Release
@@ -98,6 +99,47 @@ jobs:
       with:
         check_name: Unit Test Results
         files: test-results/**/*.trx
+
+    # Converts the Cobertura XML written by the coverlet collector during the Test step
+    # into a JSON summary (rendered as markdown by the next step) and a browsable HTML
+    # report (uploaded as an artifact).
+    # The glob is one level deep on purpose: coverlet also leaves a copy of the file in a
+    # per-host subfolder, and ** would load both.
+    - name: Generate coverage report
+      uses: danielpalme/ReportGenerator-GitHub-Action@d3ebf1f760f7d8ab92cc44d9bcfee7ad73722a31 # 5.5.11
+      if: always() && steps.test.outcome != 'skipped'
+      with:
+        reports: test-results/*/coverage.cobertura.xml
+        targetdir: coverage-report
+        reporttypes: JsonSummary;Html
+        title: Code Coverage
+
+    - name: Build coverage comment
+      if: always() && steps.test.outcome != 'skipped'
+      run: jq -r -f .github/scripts/coverage-comment.jq coverage-report/Summary.json > coverage-report/comment.md
+
+    - name: Publish coverage summary
+      if: always() && steps.test.outcome != 'skipped'
+      run: cat coverage-report/comment.md >> "$GITHUB_STEP_SUMMARY"
+
+    # Sticky comment: one comment per PR, updated in place on every push instead of
+    # adding a new one. Skipped for fork PRs, which get a read-only token.
+    - name: Comment coverage on PR
+      uses: marocchino/sticky-pull-request-comment@5770ad5eb8f42dd2c4f34da00c94c5381e49af88 # v3.0.5
+      if: >
+        always() && steps.test.outcome != 'skipped'
+        && github.event_name == 'pull_request'
+        && github.event.pull_request.head.repo.full_name == github.repository
+      with:
+        header: code-coverage
+        path: coverage-report/comment.md
+
+    - name: Upload Coverage Report
+      uses: actions/upload-artifact@v7
+      if: always() && steps.test.outcome != 'skipped'
+      with:
+        name: coverage-report
+        path: coverage-report/
 
     - name: Upload Test Results
       uses: actions/upload-artifact@v7
