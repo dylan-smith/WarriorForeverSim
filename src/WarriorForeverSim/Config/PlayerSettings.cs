@@ -13,22 +13,18 @@ namespace WarriorForeverSim
         {
             get
             {
-                switch (Race)
+                return Race switch
                 {
-                    case Race.Dwarf:
-                        return 66.0;
-                    case Race.NightElf:
-                        return 61.0;
-                    case Race.Orc:
-                        return 67.0;
-                    case Race.Tauren:
-                        return 69.0;
-                    case Race.Troll:
-                        return 65.0;
-                    default:
-                        // TODO: Richer exceptions
-                        throw new Exception("Race not set");
-                }
+                    Race.Human => 120,
+                    Race.Dwarf => 122,
+                    Race.Gnome => 115,
+                    Race.NightElf => 117,
+                    Race.Orc => 123,
+                    Race.Tauren => 125,
+                    Race.Troll => 121,
+                    Race.Undead => 119,
+                    _ => throw new Exception("Race not set"),// TODO: Richer exceptions
+                };
             }
         }
 
@@ -36,22 +32,18 @@ namespace WarriorForeverSim
         {
             get
             {
-                switch (Race)
+                return Race switch
                 {
-                    case Race.Dwarf:
-                        return 147.0;
-                    case Race.NightElf:
-                        return 156.0;
-                    case Race.Orc:
-                        return 148.0;
-                    case Race.Tauren:
-                        return 146.0;
-                    case Race.Troll:
-                        return 153.0;
-                    default:
-                        // TODO: Richer exceptions
-                        throw new Exception("Race not set");
-                }
+                    Race.Human => 80,
+                    Race.Dwarf => 76,
+                    Race.Gnome => 83,
+                    Race.NightElf => 85,
+                    Race.Orc => 77,
+                    Race.Tauren => 75,
+                    Race.Troll => 82,
+                    Race.Undead => 78,
+                    _ => throw new Exception("Race not set"),// TODO: Richer exceptions
+                };
             }
         }
 
@@ -59,22 +51,18 @@ namespace WarriorForeverSim
         {
             get
             {
-                switch (Race)
+                return Race switch
                 {
-                    case Race.Dwarf:
-                        return 111.0;
-                    case Race.NightElf:
-                        return 107.0;
-                    case Race.Orc:
-                        return 110.0;
-                    case Race.Tauren:
-                        return 110.0;
-                    case Race.Troll:
-                        return 109.0;
-                    default:
-                        // TODO: Richer exceptions
-                        throw new Exception("Race not set");
-                }
+                    Race.Human => 110,
+                    Race.Dwarf => 113,
+                    Race.Gnome => 109,
+                    Race.NightElf => 109,
+                    Race.Orc => 112,
+                    Race.Tauren => 112,
+                    Race.Troll => 111,
+                    Race.Undead => 111,
+                    _ => throw new Exception("Race not set"),// TODO: Richer exceptions
+                };
             }
         }
 
@@ -82,50 +70,19 @@ namespace WarriorForeverSim
         {
             get
             {
-                switch (Race)
+                return Race switch
                 {
-                    case Race.Dwarf:
-                        return 76.0;
-                    case Race.NightElf:
-                        return 77.0;
-                    case Race.Orc:
-                        return 74.0;
-                    case Race.Tauren:
-                        return 72.0;
-                    case Race.Troll:
-                        return 73.0;
-                    default:
-                        // TODO: Richer exceptions
-                        throw new Exception("Race not set");
-                }
+                    Race.Human => 30,
+                    Race.Dwarf => 29,
+                    Race.Gnome => 35,
+                    Race.NightElf => 30,
+                    Race.Orc => 27,
+                    Race.Tauren => 25,
+                    Race.Troll => 26,
+                    Race.Undead => 28,
+                    _ => throw new Exception("Race not set"),// TODO: Richer exceptions
+                };
             }
         }
-
-        public double Spirit
-        {
-            get
-            {
-                switch (Race)
-                {
-                    case Race.Dwarf:
-                        return 82.0;
-                    case Race.NightElf:
-                        return 83.0;
-                    case Race.Orc:
-                        return 86.0;
-                    case Race.Tauren:
-                        return 85.0;
-                    case Race.Troll:
-                        return 84.0;
-                    default:
-                        // TODO: Richer exceptions
-                        throw new Exception("Race not set");
-                }
-            }
-        }
-
-        public double Health => 3488.0;
-
-        public double Mana => 3253.0;
     }
 }

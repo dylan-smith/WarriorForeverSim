@@ -9,18 +9,22 @@ namespace WarriorForeverSim
 
         protected override double InstanceCalculate(GearItem weapon, SimulationState state)
         {
+            // TODO: This is main hand white hits only, yellow attacks have a different calc (and I think off hand too)
             var bossDefense = state.Config.BossSettings.Defense;
             var weaponSkill = WeaponSkillCalculator.Calculate(weapon, state);
-            var missChance = bossDefense - weaponSkill > 10
-                ? 0.07 + ((bossDefense - weaponSkill - 10) * 0.004)
-                : 0.05 + ((bossDefense - weaponSkill) * 0.001);
+            var defenseSkillDiff = bossDefense - weaponSkill;
 
-            missChance -= state.Config.Gear.GetAllGear().Sum(x => x.HitRating);
-            missChance -= state.Config.Gear.GetAllEnchants().Sum(x => x.HitRating);
+            var baseMissChance = state.Config.Gear.IsDualWielding() ? 0.24 : 0.05;
+            var hitSuppression = defenseSkillDiff > 10
+                ? defenseSkillDiff * 0.002
+                : defenseSkillDiff * 0.001;
 
-            missChance = Math.Max(missChance, 0.0);
+            var missChance = baseMissChance + hitSuppression;
 
-            return missChance;
+            var hitChance = state.Config.Gear.GetStatTotal(x => x.HitRating);
+            missChance -= hitChance;
+
+            return missChance.Normalize();
         }
     }
 }

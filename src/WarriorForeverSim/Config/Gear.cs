@@ -147,5 +147,10 @@ namespace WarriorForeverSim
         {
             return ids.Count(id => GetAllGear().Any(g => g.Wowhead == id));
         }
+
+        public bool IsDualWielding()
+        {
+            return MainHand != null && OffHand != null;
+        }
     }
 }
