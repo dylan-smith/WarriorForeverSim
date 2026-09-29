@@ -41,10 +41,8 @@ namespace WarriorForeverSim.Tests
                 Config = new DefaultConfig()
             };
 
-            state.Config.PlayerSettings.Level = 69;
-
-            // TODO: Need to remove a talent point otherwise we'll get a 2nd warning about too many talent points
-            state.Config.Talents.Remove(Talent.Cruelty);
+            state.Config.PlayerSettings.Level = 59;
+            state.Config.Talents[Talent.Impale] = 1;
 
             Assert.IsTrue(state.Validate());
             Assert.AreEqual(1, state.Warnings.Count);
@@ -97,14 +95,14 @@ namespace WarriorForeverSim.Tests
         }
 
         [TestMethod]
-        public void MissingRangedWeapon()
+        public void MissingMainHandWeapon()
         {
             var state = new SimulationState
             {
                 Config = new DefaultConfig()
             };
 
-            state.Config.Gear.Ranged = null;
+            state.Config.Gear.MainHand = null;
 
             Assert.IsFalse(state.Validate());
             Assert.AreEqual(1, state.Errors.Count);

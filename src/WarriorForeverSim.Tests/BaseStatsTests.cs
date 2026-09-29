@@ -7,13 +7,39 @@ namespace WarriorForeverSim.Tests
     public class BaseStatsTests
     {
         [TestMethod]
+        public void Human()
+        {
+            var state = new SimulationState();
+            state.Config.PlayerSettings.Race = Race.Human;
+
+            Assert.AreEqual(120, StrengthCalculator.Calculate(state));
+            Assert.AreEqual(80, AgilityCalculator.Calculate(state));
+            Assert.AreEqual(110, state.Config.PlayerSettings.Stamina);
+            Assert.AreEqual(30, state.Config.PlayerSettings.Intellect);
+        }
+
+        [TestMethod]
         public void Dwarf()
         {
             var state = new SimulationState();
             state.Config.PlayerSettings.Race = Race.Dwarf;
 
-            Assert.AreEqual(66, StrengthCalculator.Calculate(state));
-            Assert.AreEqual(147, AgilityCalculator.Calculate(state));
+            Assert.AreEqual(122, StrengthCalculator.Calculate(state));
+            Assert.AreEqual(76, AgilityCalculator.Calculate(state));
+            Assert.AreEqual(113, state.Config.PlayerSettings.Stamina);
+            Assert.AreEqual(29, state.Config.PlayerSettings.Intellect);
+        }
+
+        [TestMethod]
+        public void Gnome()
+        {
+            var state = new SimulationState();
+            state.Config.PlayerSettings.Race = Race.Gnome;
+
+            Assert.AreEqual(115, StrengthCalculator.Calculate(state));
+            Assert.AreEqual(83, AgilityCalculator.Calculate(state));
+            Assert.AreEqual(109, state.Config.PlayerSettings.Stamina);
+            Assert.AreEqual(35, state.Config.PlayerSettings.Intellect);
         }
 
         [TestMethod]
@@ -22,8 +48,10 @@ namespace WarriorForeverSim.Tests
             var state = new SimulationState();
             state.Config.PlayerSettings.Race = Race.NightElf;
 
-            Assert.AreEqual(61, StrengthCalculator.Calculate(state));
-            Assert.AreEqual(156, AgilityCalculator.Calculate(state));
+            Assert.AreEqual(117, StrengthCalculator.Calculate(state));
+            Assert.AreEqual(85, AgilityCalculator.Calculate(state));
+            Assert.AreEqual(109, state.Config.PlayerSettings.Stamina);
+            Assert.AreEqual(30, state.Config.PlayerSettings.Intellect);
         }
 
         [TestMethod]
@@ -32,8 +60,10 @@ namespace WarriorForeverSim.Tests
             var state = new SimulationState();
             state.Config.PlayerSettings.Race = Race.Orc;
 
-            Assert.AreEqual(67, StrengthCalculator.Calculate(state));
-            Assert.AreEqual(148, AgilityCalculator.Calculate(state));
+            Assert.AreEqual(123, StrengthCalculator.Calculate(state));
+            Assert.AreEqual(77, AgilityCalculator.Calculate(state));
+            Assert.AreEqual(112, state.Config.PlayerSettings.Stamina);
+            Assert.AreEqual(27, state.Config.PlayerSettings.Intellect);
         }
 
         [TestMethod]
@@ -42,8 +72,10 @@ namespace WarriorForeverSim.Tests
             var state = new SimulationState();
             state.Config.PlayerSettings.Race = Race.Tauren;
 
-            Assert.AreEqual(69, StrengthCalculator.Calculate(state));
-            Assert.AreEqual(146, AgilityCalculator.Calculate(state));
+            Assert.AreEqual(125, StrengthCalculator.Calculate(state));
+            Assert.AreEqual(75, AgilityCalculator.Calculate(state));
+            Assert.AreEqual(112, state.Config.PlayerSettings.Stamina);
+            Assert.AreEqual(25, state.Config.PlayerSettings.Intellect);
         }
 
         [TestMethod]
@@ -52,11 +84,23 @@ namespace WarriorForeverSim.Tests
             var state = new SimulationState();
             state.Config.PlayerSettings.Race = Race.Troll;
 
-            Assert.AreEqual(65, StrengthCalculator.Calculate(state));
-            Assert.AreEqual(153, AgilityCalculator.Calculate(state));
+            Assert.AreEqual(121, StrengthCalculator.Calculate(state));
+            Assert.AreEqual(82, AgilityCalculator.Calculate(state));
+            Assert.AreEqual(111, state.Config.PlayerSettings.Stamina);
+            Assert.AreEqual(26, state.Config.PlayerSettings.Intellect);
         }
 
-        // TODO: Other Races
+        [TestMethod]
+        public void Undead()
+        {
+            var state = new SimulationState();
+            state.Config.PlayerSettings.Race = Race.Undead;
+
+            Assert.AreEqual(119, StrengthCalculator.Calculate(state));
+            Assert.AreEqual(78, AgilityCalculator.Calculate(state));
+            Assert.AreEqual(111, state.Config.PlayerSettings.Stamina);
+            Assert.AreEqual(28, state.Config.PlayerSettings.Intellect);
+        }
 
         [TestMethod]
         public void NoRace()

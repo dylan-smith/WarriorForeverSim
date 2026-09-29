@@ -57,9 +57,9 @@ namespace WarriorForeverSim
 
         private bool ValidateMissingMainHandWeapon() => Gear.MainHand != null;
 
-        private bool ValidatePlayerMaxLevel() => PlayerSettings.Level == 70;
+        private bool ValidatePlayerMaxLevel() => PlayerSettings.Level == 60;
 
-        private bool ValidateAllGearSelected() => Gear.GetAllGear().Count() == 19;
+        private bool ValidateAllGearSelected() => Gear.GetAllGear().Count() == 17;
 
         private bool ValidateTooManyTalentPoints()
         {

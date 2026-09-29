@@ -16,7 +16,8 @@ namespace WarriorForeverSim
         WorldBoss,
         ZulGurub,
         Naxxramas,
-        Honor
+        Honor,
+        Quest,
     }
 
     public static class GearSourceExtensions
@@ -38,6 +39,7 @@ namespace WarriorForeverSim
                 "zg" => GearSource.ZulGurub,
                 "naxx" => GearSource.Naxxramas,
                 "honor" => GearSource.Honor,
+                "quest" => GearSource.Quest,
                 _ => throw new ArgumentException($"Unrecognized gear source {value}"),
             };
         }

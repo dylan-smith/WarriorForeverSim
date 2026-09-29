@@ -161,7 +161,7 @@
     },
     "source": {
       "type": "string",
-      "enum": [ "dungeon", "mc", "bwl", "aq40", "aq20", "crafting", "rep", "ah", "vendor", "heroic", "worldboss", "zg", "naxx", "honor" ]
+      "enum": [ "dungeon", "mc", "bwl", "aq40", "aq20", "crafting", "rep", "ah", "vendor", "worldboss", "zg", "naxx", "honor", "quest" ]
     }
   }
 }

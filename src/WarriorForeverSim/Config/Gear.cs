@@ -23,8 +23,6 @@ namespace WarriorForeverSim
         public GearItem Trinket1 { get; set; }
         public GearItem Trinket2 { get; set; }
         public GearItem Ranged { get; set; }
-        public GearItem Ammo { get; set; }
-        public GearItem Quiver { get; set; }
         public ICollection<GearItem> Other { get; } = [];
 
         public IEnumerable<GearItem> GetAllGear()
@@ -112,16 +110,6 @@ namespace WarriorForeverSim
             if (Ranged != null)
             {
                 yield return Ranged;
-            }
-
-            if (Ammo != null)
-            {
-                yield return Ammo;
-            }
-
-            if (Quiver != null)
-            {
-                yield return Quiver;
             }
 
             foreach (var x in Other)
