@@ -1,7 +1,4 @@
-﻿using System;
-using System.Linq;
-
-namespace WarriorForeverSim
+﻿namespace WarriorForeverSim
 {
     public class MissChanceCalculator : BaseStatCalculator
     {
