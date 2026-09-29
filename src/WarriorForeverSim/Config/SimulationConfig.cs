@@ -81,8 +81,6 @@ namespace WarriorForeverSim
         {
             var foodBuffCount = 0;
 
-            // TODO: Add various food buffs
-
             return foodBuffCount <= 1;
         }
     }

@@ -97,8 +97,6 @@ namespace WarriorForeverSim.Tests
             };
 
             state.Config.Buffs.Clear();
-            // the mark debuff isn't included in the in-game state sheet (obv)
-            state.Config.Talents[Talent.ImprovedHuntersMark] = 0;
 
             state.Validate();
 

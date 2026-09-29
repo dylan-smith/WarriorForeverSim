@@ -6,27 +6,10 @@
 
         protected override double InstanceCalculate(SimulationState state)
         {
-            var rangedAP = state.Config.Gear.GetStatTotal(x => x.AttackPower);
-            rangedAP += AgilityCalculator.Calculate(state);
+            var attackPower = state.Config.Gear.GetStatTotal(x => x.AttackPower);
+            attackPower += AgilityCalculator.Calculate(state);
 
-            if (state.Config.Talents.ContainsKey(Talent.TrueshotAura) || state.Config.Buffs.Contains(Buff.TrueshotAura))
-            {
-                rangedAP += 125;
-            }
-
-            if (state.Config.Buffs.Contains(Buff.BlessingOfMight))
-            {
-                rangedAP += 220;
-            }
-
-            if (state.Config.Buffs.Contains(Buff.ImprovedBlessingOfMight))
-            {
-                rangedAP += 264;
-            }
-
-            // TODO: Orc Bloodfury
-
-            return rangedAP;
+            return attackPower;
         }
     }
 }

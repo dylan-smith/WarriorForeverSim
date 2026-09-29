@@ -26,7 +26,7 @@ namespace WarriorForeverSim
             return value switch
             {
                 "dungeon" => GearSource.Dungeon,
-                "molten-core" => GearSource.MoltenCore,
+                "mc" => GearSource.MoltenCore,
                 "bwl" => GearSource.BlackWingLair,
                 "aq40" => GearSource.TempleOfAhnQiraj,
                 "aq20" => GearSource.RuinsOfAhnQiraj,

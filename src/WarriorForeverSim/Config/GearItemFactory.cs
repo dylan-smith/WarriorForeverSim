@@ -230,7 +230,6 @@ namespace WarriorForeverSim
             var assemblyPath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
             var gearPath = Path.Join(assemblyPath, "Gear");
             var enchantsPath = Path.Join(assemblyPath, "Enchants");
-            var gemsPath = Path.Join(assemblyPath, "Gems");
 
             _gearByType = new Dictionary<GearType, IEnumerable<GearItem>>();
             _allGear = new List<GearItem>();

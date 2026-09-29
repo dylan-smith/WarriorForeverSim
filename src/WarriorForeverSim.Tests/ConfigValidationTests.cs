@@ -45,7 +45,7 @@ namespace WarriorForeverSim.Tests
             state.Config.PlayerSettings.Level = 69;
 
             // TODO: Need to remove a talent point otherwise we'll get a 2nd warning about too many talent points
-            state.Config.Talents.Remove(Talent.Readiness);
+            state.Config.Talents.Remove(Talent.Cruelty);
 
             Assert.IsTrue(state.Validate());
             Assert.AreEqual(1, state.Warnings.Count);
@@ -60,7 +60,7 @@ namespace WarriorForeverSim.Tests
                 Config = new DefaultConfig()
             };
 
-            state.Config.Talents.Remove(Talent.Readiness);
+            state.Config.Talents.Remove(Talent.Cruelty);
 
             Assert.IsTrue(state.Validate());
             Assert.AreEqual(1, state.Warnings.Count);
@@ -75,7 +75,7 @@ namespace WarriorForeverSim.Tests
                 Config = new DefaultConfig()
             };
 
-            state.Config.Talents[Talent.Survivalist] = 3;
+            state.Config.Talents[Talent.Deflection] = 3;
 
             Assert.IsTrue(state.Validate());
             Assert.AreEqual(1, state.Warnings.Count);

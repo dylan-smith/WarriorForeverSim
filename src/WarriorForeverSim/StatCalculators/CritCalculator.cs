@@ -6,28 +6,11 @@
 
         protected override double InstanceCalculate(SimulationState state)
         {
-            // base crit for hunters is oddly -1.53%
-            // TODO: Include link
             var critChance = -0.0153;
             critChance += GetCritSuppressionBasedOnBossLevel(state);
             critChance += GetCritSuppressionAura();
             critChance += state.Config.Gear.GetStatTotal(x => x.CritRating) / 2208; // 22.08 rating = 1% crit (at level 70)
             critChance += AgilityCalculator.Calculate(state) / 4000; // 40 Agi = 0.01 crit
-
-            if (state.Config.Buffs.Contains(Buff.LeaderOfThePack))
-            {
-                critChance += 0.05;
-            }
-
-            if (state.Config.Talents.TryGetValue(Talent.KillerInstinct, out var killerInstinctRank))
-            {
-                critChance += killerInstinctRank * 0.01;
-            }
-
-            if (state.Config.Buffs.Contains(Buff.ElixirOfMajorAgility))
-            {
-                critChance += 20.0 / 2208;
-            }
 
             return critChance;
         }

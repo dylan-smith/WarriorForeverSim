@@ -25,7 +25,7 @@ namespace WarriorForeverSim
         public GearItem Ranged { get; set; }
         public GearItem Ammo { get; set; }
         public GearItem Quiver { get; set; }
-        public ICollection<GearItem> Other { get; } = new List<GearItem>();
+        public ICollection<GearItem> Other { get; } = [];
 
         public IEnumerable<GearItem> GetAllGear()
         {
