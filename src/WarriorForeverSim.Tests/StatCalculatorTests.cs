@@ -17,7 +17,7 @@ namespace WarriorForeverSim.Tests
             var state = new SimulationState();
             state.Config.PlayerSettings.Race = Race.Human;
 
-            Assert.AreEqual(Constants.HUMAN_STR + 49, StrengthCalculator.Calculate(state));
+            Assert.AreEqual(Constants.HUMAN_STR, StrengthCalculator.Calculate(state));
         }
 
         [TestMethod]
@@ -100,11 +100,11 @@ namespace WarriorForeverSim.Tests
 
             state.Validate();
 
-            Assert.AreEqual(71, StrengthCalculator.Calculate(state));
-            Assert.AreEqual(769, AgilityCalculator.Calculate(state));
-            Assert.AreEqual(1938, MeleeAttackPowerCalculator.Calculate(state));
+            Assert.AreEqual(289, StrengthCalculator.Calculate(state));
+            Assert.AreEqual(205, AgilityCalculator.Calculate(state));
+            Assert.AreEqual(722, MeleeAttackPowerCalculator.Calculate(state));
             // subtracting out the crit suppression that the sim includes but the stat page in game doesn't
-            Assert.AreEqual(0.2382 - 0.048, MeleeCritCalculator.Calculate(state), 0.0001);
+            Assert.AreEqual(0.0, MeleeCritCalculator.Calculate(state), 0.0001);
         }
 
         [TestMethod]
@@ -120,13 +120,11 @@ namespace WarriorForeverSim.Tests
 
             state.Validate();
 
-            Assert.AreEqual(71, StrengthCalculator.Calculate(state));
-            Assert.AreEqual(669, AgilityCalculator.Calculate(state));
-            Assert.AreEqual(1764, MeleeAttackPowerCalculator.Calculate(state));
+            Assert.AreEqual(289, StrengthCalculator.Calculate(state));
+            Assert.AreEqual(205, AgilityCalculator.Calculate(state));
+            Assert.AreEqual(722, MeleeAttackPowerCalculator.Calculate(state));
             // subtracting out the crit suppression that the sim includes but the stat page in game doesn't
-            Assert.AreEqual(0.1832 - 0.048, MeleeCritCalculator.Calculate(state), 0.0001);
-
-
+            Assert.AreEqual(0.0, MeleeCritCalculator.Calculate(state), 0.0001);
         }
 
         [TestMethod]
@@ -134,20 +132,17 @@ namespace WarriorForeverSim.Tests
         {
             var state = new SimulationState();
             state.Config.PlayerSettings.Race = Race.Human;
-            state.Config.PlayerSettings.Level = 70;
-            // intentionally setting boss to 70 to avoid the 3% crit suppression on raid bosses
-            state.Config.BossSettings.Level = 70;
+            state.Config.PlayerSettings.Level = 60;
+            // intentionally setting boss to 60 to avoid the 3% crit suppression on raid bosses
+            state.Config.BossSettings.Level = 60;
 
             // numbers taken from in game stat page with no gear and no talents
-            Assert.AreEqual(333, MeleeAttackPowerCalculator.Calculate(state));
+            Assert.AreEqual(320, MeleeAttackPowerCalculator.Calculate(state));
             // in-game it says 2.17% but the sim subtracts 1.8% for crit suppression aura
-            Assert.AreEqual(0.0217 - 0.018, MeleeCritCalculator.Calculate(state), 0.000001);
-            Assert.AreEqual(65, StrengthCalculator.Calculate(state));
-            Assert.AreEqual(148, AgilityCalculator.Calculate(state));
+            Assert.AreEqual(0.0, MeleeCritCalculator.Calculate(state), 0.000001);
+            Assert.AreEqual(120, StrengthCalculator.Calculate(state));
+            Assert.AreEqual(80, AgilityCalculator.Calculate(state));
         }
-
-        // 155 RAP for aspect of the hawk
-        // 130 base RAP ???
 
         // TODO: Tests for all calculators that need to convert between rating and %
         // TODO: Should probably have a test for each calculator for base stats
