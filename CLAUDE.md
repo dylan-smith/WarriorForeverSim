@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project
 
-A discrete-event combat simulator for a warrior in World of Warcraft Forever. The code was copied from a WoW TBC hunter simulator and still contains hunter-specific content (Auto Shot, aspects, hunter talents and procs, ranged stat calculators, hunter gear data). That content is being replaced with warrior equivalents; treat it as scaffolding to convert, not as the target design, and do not add new hunter-specific code. C# on .NET 10, MSTest. Solution and both projects live under `src/`; `Program.cs` is still a placeholder, so the library and its tests are the real product.
+A discrete-event combat simulator for a warrior in World of Warcraft Forever. The code was copied from a WoW TBC hunter simulator and still contains hunter-specific content (Auto Shot, aspects, hunter talents and procs, ranged stat calculators, hunter gear data). That content is being replaced with warrior equivalents; treat it as scaffolding to convert, not as the target design, and do not add new hunter-specific code. C# on .NET 10, MSTest. The solution and its projects live under `src/`: the library `WarriorForeverSim` (its `Program.cs` is still a placeholder), `WarriorForeverSim.Tests`, and `WarriorForeverSim.Api`, an ASP.NET Core minimal API that backs the React + TypeScript (Vite) web UI in `web/`.
 
 ## Commands
 
@@ -19,6 +19,10 @@ dotnet test WarriorForeverSim.Tests --filter "Name=SerpentsSwiftness"           
 dotnet format WarriorForeverSim.sln --verify-no-changes --severity warn                    # what CI's lint job runs
 dotnet format WarriorForeverSim.sln                                                        # fix formatting
 ```
+
+Web UI: run `dotnet run --project WarriorForeverSim.Api` (from `src/`, serves on http://localhost:5058), then `npm install` and `npm run dev` from `web/` (Vite proxies `/api` to the API). `npm run lint` and `npm run build` are what CI's web job runs. The build writes to `src/WarriorForeverSim.Api/wwwroot` (gitignored), so the API alone serves the built UI.
+
+The API (`SimulationRunner.cs`) builds a `DefaultConfig` per iteration, overrides the request's settings, and aggregates `SimulationReport.FromState` results. Simulations are serialized behind a lock because `RandomGenerator` and the stat calculator cache are process-wide singletons.
 
 CI (`.github/workflows/ci.yml`) fails on any `.editorconfig` rule at `warning` severity or above, so run `dotnet format` before pushing. Notable enforced rules: `var` everywhere, braces always, block-scoped namespaces, `using` outside namespace, `_camelCase` private fields, `readonly` where possible, no unused usings/members/assignments (IDE0005/0051/0052/0059).
 
