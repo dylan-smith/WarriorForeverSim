@@ -1,5 +1,6 @@
 import { useState, type FormEvent } from 'react'
 import type { SimulateRequest, SimulationOptions } from '../api'
+import { spaced } from '../format'
 
 interface SimFormProps {
   options: SimulationOptions
@@ -8,9 +9,6 @@ interface SimFormProps {
 }
 
 const BOSS_LEVELS = [60, 61, 62, 63]
-
-// Enum names arrive in PascalCase (e.g. "NightElf"); show them with spaces.
-const label = (name: string) => name.replace(/([a-z])([A-Z])/g, '$1 $2')
 
 export function SimForm({ options, running, onRun }: SimFormProps) {
   const [request, setRequest] = useState<SimulateRequest>(options.defaults)
@@ -32,7 +30,7 @@ export function SimForm({ options, running, onRun }: SimFormProps) {
         <select value={request.race} onChange={(e) => update('race', e.target.value)}>
           {options.races.map((race) => (
             <option key={race} value={race}>
-              {label(race)}
+              {spaced(race)}
             </option>
           ))}
         </select>
@@ -54,7 +52,7 @@ export function SimForm({ options, running, onRun }: SimFormProps) {
         <select value={request.bossType} onChange={(e) => update('bossType', e.target.value)}>
           {options.bossTypes.map((type) => (
             <option key={type} value={type}>
-              {label(type)}
+              {spaced(type)}
             </option>
           ))}
         </select>

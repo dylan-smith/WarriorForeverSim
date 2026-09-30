@@ -47,6 +47,46 @@ namespace WarriorForeverSim.Tests
         }
 
         [TestMethod]
+        public void IncludesDetailsRollsAndAuras()
+        {
+            var state = new SimulationState();
+            var damage = new DamageEvent(0.0, 100.0, DamageType.Hit, 0.1, 0.2, 0.7)
+            {
+                MissRoll = 0.5,
+                CritRoll = 0.6,
+                CritRollChance = 0.22,
+                ActiveAuras = [Aura.SwingTimerCooldown],
+            };
+            damage.AddDetail("Damage", "Final damage", "100.0");
+            state.ProcessedEvents.Add(damage);
+
+            var entry = SimulationLogEntry.FromState(state).Single();
+
+            Assert.AreEqual(0.5, entry.MissRoll);
+            Assert.AreEqual(0.6, entry.CritRoll);
+            Assert.AreEqual(0.22, entry.CritRollChance);
+            Assert.HasCount(1, entry.Details);
+            Assert.AreEqual("Damage", entry.Details[0].Section);
+            Assert.AreEqual("Final damage", entry.Details[0].Label);
+            Assert.AreEqual("100.0", entry.Details[0].Value);
+            CollectionAssert.AreEqual(new[] { Aura.SwingTimerCooldown }, entry.ActiveAuras.ToArray());
+        }
+
+        [TestMethod]
+        public void PublishedEventsSnapshotActiveAuras()
+        {
+            RandomGenerator.Seed(64852147);
+
+            var state = new Simulation(new DefaultConfig()).Run();
+            var log = SimulationLogEntry.FromState(state);
+
+            // A swing puts the swing timer on cooldown; its completion clears it.
+            Assert.Contains(Aura.SwingTimerCooldown, log.First(e => e.Event == nameof(AutoAttackSwingEvent)).ActiveAuras);
+            Assert.DoesNotContain(Aura.SwingTimerCooldown, log.First(e => e.Event == nameof(SwingTimerCompletedEvent)).ActiveAuras);
+            Assert.IsNotEmpty(log.First(e => e.Event == nameof(DamageEvent)).Details);
+        }
+
+        [TestMethod]
         public void MatchesReportForDefaultConfig()
         {
             RandomGenerator.Seed(64852147);

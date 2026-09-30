@@ -11,7 +11,12 @@ namespace WarriorForeverSim
         public DamageType? DamageType { get; }
         public double? MissChance { get; }
         public double? CritChance { get; }
+        public double? MissRoll { get; }
+        public double? CritRoll { get; }
+        public double? CritRollChance { get; }
         public double TotalDamage { get; }
+        public IReadOnlyList<EventDetail> Details { get; }
+        public IReadOnlyList<Aura> ActiveAuras { get; }
 
         private SimulationLogEntry(EventInfo e, double totalDamage)
         {
@@ -19,6 +24,8 @@ namespace WarriorForeverSim
             Event = e.GetType().Name;
             Description = e.Description;
             TotalDamage = totalDamage;
+            Details = [.. e.Details];
+            ActiveAuras = e.ActiveAuras;
 
             if (e is DamageEvent damageEvent)
             {
@@ -26,6 +33,9 @@ namespace WarriorForeverSim
                 DamageType = damageEvent.DamageType;
                 MissChance = damageEvent.MissChance;
                 CritChance = damageEvent.CritChance;
+                MissRoll = damageEvent.MissRoll;
+                CritRoll = damageEvent.CritRoll;
+                CritRollChance = damageEvent.CritRollChance;
             }
         }
 

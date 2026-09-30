@@ -29,7 +29,18 @@ export interface SimulationLogEntry {
   damageType: DamageType | null
   missChance: number | null
   critChance: number | null
+  missRoll: number | null
+  critRoll: number | null
+  critRollChance: number | null
   totalDamage: number
+  details: EventDetail[]
+  activeAuras: string[]
+}
+
+export interface EventDetail {
+  section: string
+  label: string
+  value: string
 }
 
 export interface SimulationOptions {
