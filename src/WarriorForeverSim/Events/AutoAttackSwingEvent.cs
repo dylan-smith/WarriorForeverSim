@@ -7,6 +7,8 @@
         public AutoAttackSwingEvent(double timestamp) : base(timestamp)
         { }
 
+        public override string Description => "Main-hand swing";
+
         public override void ProcessEvent(SimulationState state)
         {
             var swingSpeed = state.Config.Gear.MainHand.Speed / MeleeHasteCalculator.Calculate(state);

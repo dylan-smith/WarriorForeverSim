@@ -5,6 +5,8 @@
         public SwingTimerCompletedEvent(double timestamp) : base(timestamp)
         { }
 
+        public override string Description => "Swing timer ready";
+
         public override void ProcessEvent(SimulationState state)
         {
             if (!state.Auras.Remove(Aura.SwingTimerCooldown))

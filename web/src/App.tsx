@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { getOptions, simulate, type SimulateRequest, type SimulateResponse, type SimulationOptions } from './api'
+import { CombatLog } from './components/CombatLog'
 import { Results } from './components/Results'
 import { SimForm } from './components/SimForm'
 
@@ -42,10 +43,13 @@ function App() {
       ) : !options ? (
         <p className="empty">Loading…</p>
       ) : (
-        <div className="layout">
-          <SimForm options={options} running={running} onRun={handleRun} />
-          <Results result={result} error={runError} running={running} />
-        </div>
+        <>
+          <div className="layout">
+            <SimForm options={options} running={running} onRun={handleRun} />
+            <Results result={result} error={runError} running={running} />
+          </div>
+          {result && result.errors.length === 0 && !runError ? <CombatLog entries={result.firstRunLog} /> : null}
+        </>
       )}
     </main>
   )

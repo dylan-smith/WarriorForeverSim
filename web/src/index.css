@@ -193,3 +193,77 @@ h2 {
   background: var(--error-bg);
   color: var(--error-text);
 }
+
+.combat-log {
+  margin-top: 16px;
+}
+
+.combat-log-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 8px 16px;
+  margin-bottom: 12px;
+}
+
+.combat-log-header h2 {
+  margin: 0;
+}
+
+.combat-log-header .toggle {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.875rem;
+  color: var(--muted);
+  cursor: pointer;
+}
+
+.log-scroll {
+  max-height: 480px;
+  overflow: auto;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+}
+
+.log-scroll table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.85rem;
+}
+
+.log-scroll th,
+.log-scroll td {
+  padding: 6px 10px;
+  text-align: left;
+  white-space: nowrap;
+  border-bottom: 1px solid var(--border);
+}
+
+.log-scroll th {
+  position: sticky;
+  top: 0;
+  background: var(--surface);
+  color: var(--muted);
+  font-weight: 600;
+}
+
+.log-scroll .num {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+.log-scroll tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.row-crit td {
+  color: var(--accent);
+  font-weight: 600;
+}
+
+.row-miss td,
+.row-other td {
+  color: var(--muted);
+}

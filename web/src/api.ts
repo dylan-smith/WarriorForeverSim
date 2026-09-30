@@ -16,6 +16,20 @@ export interface SimulateResponse {
   averageMisses: number
   warnings: string[]
   errors: string[]
+  firstRunLog: SimulationLogEntry[]
+}
+
+export type DamageType = 'Hit' | 'Crit' | 'Miss'
+
+export interface SimulationLogEntry {
+  timestamp: number
+  event: string
+  description: string
+  damage: number | null
+  damageType: DamageType | null
+  missChance: number | null
+  critChance: number | null
+  totalDamage: number
 }
 
 export interface SimulationOptions {

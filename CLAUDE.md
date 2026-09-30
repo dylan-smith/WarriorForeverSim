@@ -22,7 +22,7 @@ dotnet format WarriorForeverSim.sln                                             
 
 Web UI: run `dotnet run --project WarriorForeverSim.Api` (from `src/`, serves on http://localhost:5058), then `npm install` and `npm run dev` from `web/` (Vite proxies `/api` to the API). `npm run lint` and `npm run build` are what CI's web job runs. The build writes to `src/WarriorForeverSim.Api/wwwroot` (gitignored), so the API alone serves the built UI.
 
-The API (`SimulationRunner.cs`) builds a `DefaultConfig` per iteration, overrides the request's settings, and aggregates `SimulationReport.FromState` results. Simulations are serialized behind a lock because `RandomGenerator` and the stat calculator cache are process-wide singletons.
+The API (`SimulationRunner.cs`) builds a `DefaultConfig` per iteration, overrides the request's settings, and aggregates `SimulationReport.FromState` results. The response also carries the first iteration's event-by-event combat log from `SimulationLogEntry.FromState`, which uses each event's `Description` (a virtual on `EventInfo`; override it on new event types). Simulations are serialized behind a lock because `RandomGenerator` and the stat calculator cache are process-wide singletons.
 
 CI (`.github/workflows/ci.yml`) fails on any `.editorconfig` rule at `warning` severity or above, so run `dotnet format` before pushing. Notable enforced rules: `var` everywhere, braces always, block-scoped namespaces, `using` outside namespace, `_camelCase` private fields, `readonly` where possible, no unused usings/members/assignments (IDE0005/0051/0052/0059).
 

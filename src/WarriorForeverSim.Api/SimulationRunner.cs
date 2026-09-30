@@ -61,16 +61,23 @@
             try
             {
                 var reports = new List<SimulationReport>();
+                IReadOnlyList<SimulationLogEntry> firstRunLog = [];
 
                 for (var i = 0; i < request.Iterations; i++)
                 {
                     cancellationToken.ThrowIfCancellationRequested();
 
-                    var report = SimulationReport.FromState(new Simulation(BuildConfig(request)).Run());
+                    var state = new Simulation(BuildConfig(request)).Run();
+                    var report = SimulationReport.FromState(state);
 
                     if (report.Errors.Count > 0)
                     {
-                        return new SimulateResponse(0, 0, 0, 0, 0, 0, 0, report.Warnings, report.Errors);
+                        return new SimulateResponse(0, 0, 0, 0, 0, 0, 0, report.Warnings, report.Errors, []);
+                    }
+
+                    if (i == 0)
+                    {
+                        firstRunLog = SimulationLogEntry.FromState(state);
                     }
 
                     reports.Add(report);
@@ -85,7 +92,8 @@
                     reports.Average(r => r.Crits),
                     reports.Average(r => r.Misses),
                     reports[0].Warnings,
-                    reports[0].Errors);
+                    reports[0].Errors,
+                    firstRunLog);
             }
             finally
             {

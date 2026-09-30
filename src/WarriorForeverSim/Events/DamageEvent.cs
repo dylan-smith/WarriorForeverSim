@@ -17,6 +17,8 @@
             HitChance = hitChance;
         }
 
+        public override string Description => DamageType == DamageType.Miss ? "Miss" : $"{DamageType} for {Damage:F0}";
+
         public override void ProcessEvent(SimulationState state)
         {
             // TODO: Windfury proc

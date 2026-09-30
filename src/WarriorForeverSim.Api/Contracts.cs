@@ -11,7 +11,8 @@
         double AverageCrits,
         double AverageMisses,
         IReadOnlyList<string> Warnings,
-        IReadOnlyList<string> Errors);
+        IReadOnlyList<string> Errors,
+        IReadOnlyList<SimulationLogEntry> FirstRunLog);
 
     public record SimulationDefaults(Race Race, int BossLevel, BossType BossType, double FightLength, int Iterations);
 
