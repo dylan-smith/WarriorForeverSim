@@ -42,6 +42,35 @@ jobs:
       run: dotnet format WarriorForeverSim.sln --no-restore --verify-no-changes --severity warn
       working-directory: src
 
+  web:
+    name: Web UI
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    defaults:
+      run:
+        working-directory: web
+
+    steps:
+    - uses: actions/checkout@v7
+
+    - name: Setup Node
+      uses: actions/setup-node@v7
+      with:
+        node-version: 24
+        cache: npm
+        cache-dependency-path: web/package-lock.json
+
+    - name: Install
+      run: npm ci
+
+    - name: Lint
+      run: npm run lint
+
+    # Type-checks (tsc -b) and bundles into src/WarriorForeverSim.Api/wwwroot.
+    - name: Build
+      run: npm run build
+
   build:
     name: Build and Test
     runs-on: ubuntu-latest

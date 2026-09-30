@@ -335,6 +335,121 @@ namespace WarriorForeverSim.Tests.AbilityTests
             Assert.AreEqual(DamageType.Hit, dmg.DamageType);
         }
 
+        [TestMethod]
+        public void AutoAttackSwingEventRecordsSwingDetails()
+        {
+            var state = new SimulationState();
+            state.Config.Gear.MainHand = new GearItem
+            {
+                Name = "Test Sword",
+                Speed = 2.6,
+                MinDamage = 100,
+                MaxDamage = 200,
+            };
+
+            BaseStatCalculator.InjectMock(typeof(MeleeHasteCalculator), new FakeStatCalculator(1.3));
+
+            var e = new AutoAttackSwingEvent(7.2);
+
+            e.ProcessEvent(state);
+
+            Assert.AreEqual("Test Sword", Detail(e, "Swing", "Weapon"));
+            Assert.AreEqual("2.60s", Detail(e, "Swing", "Base speed"));
+            Assert.AreEqual("×1.3", Detail(e, "Swing", "Haste"));
+            Assert.AreEqual("2.00s", Detail(e, "Swing", "Swing speed"));
+            Assert.AreEqual("9.20s", Detail(e, "Swing", "Next swing ready at"));
+        }
+
+        [TestMethod]
+        public void AutoAttackSwingEventRecordsHitDetails()
+        {
+            var state = new SimulationState();
+            state.Config.Gear.MainHand = new GearItem
+            {
+                Speed = 2.6,
+                MinDamage = 100,
+                MaxDamage = 200,
+            };
+
+            BaseStatCalculator.InjectMock(typeof(MissChanceCalculator), new FakeStatCalculator(0.09));
+            BaseStatCalculator.InjectMock(typeof(MeleeCritCalculator), new FakeStatCalculator(0.20));
+            BaseStatCalculator.InjectMock(typeof(MeleeAttackPowerCalculator), new FakeStatCalculator(1400));
+            RandomGenerator.InjectMock(new FakeRandomGenerator(0.5, 0.75));
+
+            var e = new AutoAttackSwingEvent(7.2);
+
+            e.ProcessEvent(state);
+
+            var dmg = e.DamageEvent;
+
+            Assert.AreEqual(DamageType.Hit, dmg.DamageType);
+            Assert.AreEqual(0.5, dmg.MissRoll);
+            Assert.AreEqual(0.75, dmg.CritRoll);
+            Assert.AreEqual(0.20, dmg.CritRollChance);
+            Assert.AreEqual("Hit 72.8% · Crit 18.2% · Miss 9.0%", Detail(dmg, "Attack table", "Outcome chances"));
+            Assert.AreEqual("150.0", Detail(dmg, "Damage", "Weapon damage (avg)"));
+            Assert.AreEqual("1400", Detail(dmg, "Damage", "Attack power"));
+            Assert.AreEqual("260.0", Detail(dmg, "Damage", "Attack power bonus"));
+            Assert.AreEqual("410.0", Detail(dmg, "Damage", "Final damage"));
+            Assert.IsFalse(dmg.Details.Any(d => d.Label == "Crit multiplier"));
+        }
+
+        [TestMethod]
+        public void AutoAttackSwingEventRecordsCritDetails()
+        {
+            var state = new SimulationState();
+            state.Config.Gear.MainHand = new GearItem
+            {
+                Speed = 2.6,
+                MinDamage = 100,
+                MaxDamage = 200,
+            };
+
+            BaseStatCalculator.InjectMock(typeof(MeleeCritCalculator), new FakeStatCalculator(0.20));
+            BaseStatCalculator.InjectMock(typeof(MeleeCritDamageMultiplierCalculator), new FakeStatCalculator(1.03));
+            RandomGenerator.InjectMock(new FakeRandomGenerator(0.5, 0.19));
+
+            var e = new AutoAttackSwingEvent(7.2);
+
+            e.ProcessEvent(state);
+
+            var dmg = e.DamageEvent;
+
+            Assert.AreEqual(DamageType.Crit, dmg.DamageType);
+            Assert.AreEqual(0.19, dmg.CritRoll);
+            Assert.AreEqual("×2.06", Detail(dmg, "Damage", "Crit multiplier"));
+            Assert.AreEqual("309.0", Detail(dmg, "Damage", "Final damage"));
+        }
+
+        [TestMethod]
+        public void AutoAttackSwingEventRecordsMissDetails()
+        {
+            var state = new SimulationState();
+            state.Config.Gear.MainHand = new GearItem
+            {
+                Speed = 2.6,
+                MinDamage = 100,
+                MaxDamage = 200,
+            };
+
+            BaseStatCalculator.InjectMock(typeof(MissChanceCalculator), new FakeStatCalculator(0.09));
+            RandomGenerator.InjectMock(new FakeRandomGenerator(0.089));
+
+            var e = new AutoAttackSwingEvent(7.2);
+
+            e.ProcessEvent(state);
+
+            var dmg = e.DamageEvent;
+
+            Assert.AreEqual(DamageType.Miss, dmg.DamageType);
+            Assert.AreEqual(0.089, dmg.MissRoll);
+            Assert.IsNull(dmg.CritRoll);
+            Assert.AreEqual("Hit 91.0% · Crit 0.0% · Miss 9.0%", Detail(dmg, "Attack table", "Outcome chances"));
+            Assert.IsFalse(dmg.Details.Any(d => d.Section == "Damage"));
+        }
+
+        private static string Detail(EventInfo e, string section, string label) => e.Details.Single(d => d.Section == section && d.Label == label).Value;
+
         private void InjectZeroMocks()
         {
             var zeroMock = new FakeStatCalculator(0.0);

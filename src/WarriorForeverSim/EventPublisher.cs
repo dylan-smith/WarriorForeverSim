@@ -1,4 +1,4 @@
-﻿using System;
+﻿using System.Linq;
 
 namespace WarriorForeverSim
 {
@@ -6,8 +6,8 @@ namespace WarriorForeverSim
     {
         public static void PublishEvent(EventInfo e, SimulationState state)
         {
+            e.ActiveAuras = state.Auras.ToList();
             state.ProcessedEvents.Add(e);
-            Console.WriteLine(e);
 
             // switch (e)
             // {
