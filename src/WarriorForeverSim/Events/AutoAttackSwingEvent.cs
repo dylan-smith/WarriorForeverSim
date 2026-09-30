@@ -32,7 +32,7 @@ namespace WarriorForeverSim
             var damageDetails = new List<(string Label, string Value)>();
 
             var missChance = MissChanceCalculator.Calculate(weapon, state);
-            var critChance = MeleeCritCalculator.Calculate(state);
+            var critChance = MeleeCritCalculator.Calculate(weapon, state);
 
             var missRoll = RandomGenerator.Roll(RollType.MeleeMiss);
 
