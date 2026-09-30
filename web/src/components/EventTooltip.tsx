@@ -1,5 +1,5 @@
 import { useLayoutEffect, useRef } from 'react'
-import type { EventDetail, SimulationLogEntry } from '../api'
+import type { DamageType, EventDetail, SimulationLogEntry } from '../api'
 import { eventLabel, percent, spaced } from '../format'
 
 export interface TooltipAnchor {
@@ -24,31 +24,55 @@ function groupBySection(details: EventDetail[]) {
   return [...sections]
 }
 
-interface RollBarProps {
-  label: string
+interface AttackTableBarProps {
   roll: number
-  chance: number
-  kind: 'miss' | 'crit'
+  missChance: number
+  critChance: number
+  outcome: DamageType
 }
 
-// A 0–100% bar with the "success" region shaded and a marker at the roll: a roll inside
-// the shaded region means the attack missed (miss bar) or crit (crit bar).
-function RollBar({ label, roll, chance, kind }: RollBarProps) {
-  const clamp = (value: number) => Math.min(Math.max(value, 0), 1) * 100
-  const landed = roll <= chance
+// The single-roll attack table as a 0–100% bar: consecutive miss, crit and hit segments,
+// with a marker at the roll showing which segment it landed in, and a legend in the same
+// order and colors.
+function AttackTableBar({ roll, missChance, critChance, outcome }: AttackTableBarProps) {
+  const clamp = (value: number) => Math.min(Math.max(value, 0), 1)
+  const segments = [
+    { kind: 'miss', label: 'Miss', chance: clamp(missChance) },
+    { kind: 'crit', label: 'Crit', chance: clamp(critChance) },
+    { kind: 'hit', label: 'Hit', chance: clamp(1 - missChance - critChance) },
+  ]
+  let start = 0
 
   return (
     <div className="roll">
       <div className="roll-label">
-        <span>{label}</span>
-        <span className={landed ? `roll-result ${kind}` : 'roll-result'}>
-          {percent(roll)} {landed ? '≤' : '>'} {percent(chance)}
+        <span>Attack table roll</span>
+        <span className={`roll-result ${outcome.toLowerCase()}`}>
+          {percent(roll)} → {outcome}
         </span>
       </div>
       <div className="roll-bar" aria-hidden="true">
-        <div className={`roll-zone ${kind}`} style={{ width: `${clamp(chance)}%` }} />
-        <div className="roll-marker" style={{ left: `${clamp(roll)}%` }} />
+        {segments.map((segment) => {
+          const left = start
+          start += segment.chance
+          return (
+            <div
+              key={segment.kind}
+              className={`roll-zone ${segment.kind}`}
+              style={{ left: `${left * 100}%`, width: `${segment.chance * 100}%` }}
+            />
+          )
+        })}
+        <div className="roll-marker" style={{ left: `${clamp(roll) * 100}%` }} />
       </div>
+      <ul className="roll-legend">
+        {segments.map((segment) => (
+          <li key={segment.kind}>
+            <span className={`roll-swatch ${segment.kind}`} aria-hidden="true" />
+            {segment.label} {percent(segment.chance)}
+          </li>
+        ))}
+      </ul>
     </div>
   )
 }
@@ -75,15 +99,16 @@ export function EventTooltip({ entry, anchor }: EventTooltipProps) {
     el.style.top = `${Math.max(MARGIN, top)}px`
   }, [anchor, entry])
 
-  const rolls =
-    entry.missRoll !== null && entry.missChance !== null ? (
-      <div className="rolls">
-        <RollBar label="Miss roll" roll={entry.missRoll} chance={entry.missChance} kind="miss" />
-        {entry.critRoll !== null && entry.critRollChance !== null ? (
-          <RollBar label="Crit roll" roll={entry.critRoll} chance={entry.critRollChance} kind="crit" />
-        ) : (
-          <p className="muted roll-skipped">Crit roll skipped — the attack missed.</p>
-        )}
+  const attackTable =
+    entry.attackRoll !== null && entry.missChance !== null && entry.critChance !== null && entry.damageType !== null ? (
+      <div className="tooltip-section">
+        <h3>Attack table</h3>
+        <AttackTableBar
+          roll={entry.attackRoll}
+          missChance={entry.missChance}
+          critChance={entry.critChance}
+          outcome={entry.damageType}
+        />
       </div>
     ) : null
 
@@ -98,10 +123,11 @@ export function EventTooltip({ entry, anchor }: EventTooltipProps) {
       </div>
       <p className="tooltip-description">{entry.description}</p>
 
+      {attackTable}
+
       {groupBySection(entry.details).map(([section, details]) => (
         <div key={section} className="tooltip-section">
           <h3>{section}</h3>
-          {section === 'Attack table' ? rolls : null}
           <dl>
             {details.map((detail) => (
               <div key={detail.label}>

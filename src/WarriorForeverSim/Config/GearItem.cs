@@ -42,10 +42,6 @@ namespace WarriorForeverSim
         public double MeleeAttackPower { get; set; }
         [YamlProperty("crit")]
         public double CritRating { get; set; }
-        [YamlProperty("rangedcrit")]
-        public double RangedCritRating { get; set; }
-        [YamlProperty("meleecrit")]
-        public double MeleeCritRating { get; set; }
         [YamlProperty("hit")]
         public double HitRating { get; set; }
         [YamlProperty("dodge")]
@@ -68,12 +64,6 @@ namespace WarriorForeverSim
         public double ShadowResistance { get; set; }
         [YamlProperty("threat")]
         public double ThreatDecrease { get; set; }
-        [YamlProperty("stealth")]
-        public double Stealth { get; set; }
-        [YamlProperty("rangedbonusdps")]
-        public double RangedBonusDPS { get; set; } // Ammo
-        [YamlProperty("rangedbonusdmg")]
-        public double RangedBonusDamage { get; set; } // E.g. Sniper Scope
         [YamlProperty("unique")]
         public bool Unique { get; set; }
         [YamlProperty("type")]

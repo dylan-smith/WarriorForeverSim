@@ -52,9 +52,7 @@ namespace WarriorForeverSim.Tests
             var state = new SimulationState();
             var damage = new DamageEvent(0.0, 100.0, DamageType.Hit, 0.1, 0.2, 0.7)
             {
-                MissRoll = 0.5,
-                CritRoll = 0.6,
-                CritRollChance = 0.22,
+                AttackRoll = 0.5,
                 ActiveAuras = [Aura.SwingTimerCooldown],
             };
             damage.AddDetail("Damage", "Final damage", "100.0");
@@ -62,9 +60,7 @@ namespace WarriorForeverSim.Tests
 
             var entry = SimulationLogEntry.FromState(state).Single();
 
-            Assert.AreEqual(0.5, entry.MissRoll);
-            Assert.AreEqual(0.6, entry.CritRoll);
-            Assert.AreEqual(0.22, entry.CritRollChance);
+            Assert.AreEqual(0.5, entry.AttackRoll);
             Assert.HasCount(1, entry.Details);
             Assert.AreEqual("Damage", entry.Details[0].Section);
             Assert.AreEqual("Final damage", entry.Details[0].Label);
