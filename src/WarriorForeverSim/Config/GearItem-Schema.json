@@ -148,10 +148,6 @@
     "wand-skill": {
       "type": "integer"
     },
-    "color": {
-      "type": "string",
-      "enum": [ "red", "yellow", "blue", "orange", "purple", "green" ]
-    },
     "unique": {
       "type": "boolean",
       "default": false
@@ -165,27 +161,7 @@
     },
     "source": {
       "type": "string",
-      "enum": [ "dungeon", "gruul", "magtheridon", "karazhan", "badges", "crafting", "rep", "ah", "vendor", "heroic", "worldboss", "zg", "naxx", "honor" ]
-    },
-    "sockets": {
-      "type": "object",
-      "properties": {
-        "red": {
-          "type": "integer"
-        },
-        "blue": {
-          "type": "integer"
-        },
-        "yellow": {
-          "type": "integer"
-        },
-        "meta": {
-          "type": "integer"
-        },
-        "bonus": {
-          "$ref": "#"
-        }
-      }
+      "enum": [ "dungeon", "mc", "bwl", "aq40", "aq20", "crafting", "rep", "ah", "vendor", "worldboss", "zg", "naxx", "honor", "quest" ]
     }
   }
 }

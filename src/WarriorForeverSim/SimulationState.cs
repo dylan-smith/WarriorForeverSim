@@ -19,7 +19,6 @@ namespace WarriorForeverSim
 
         public bool Validate()
         {
-            ApplyMetaGemBonuses();
             ApplyGearSetBonuses();
 
             var (warnings, errors) = Config.Validate();
@@ -28,13 +27,6 @@ namespace WarriorForeverSim
             Errors.AddRange(errors);
 
             return !Errors.Any();
-        }
-
-        public void ApplyMetaGemBonuses()
-        {
-            var meta = Config.Gear.GetAllGems().Where(g => g.Color == GemColor.Meta).Cast<MetaGem>().ToList();
-
-            meta.ForEach(m => m.Apply(this));
         }
 
         public void ApplyGearSetBonuses()

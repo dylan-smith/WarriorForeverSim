@@ -23,9 +23,7 @@ namespace WarriorForeverSim
         public GearItem Trinket1 { get; set; }
         public GearItem Trinket2 { get; set; }
         public GearItem Ranged { get; set; }
-        public GearItem Ammo { get; set; }
-        public GearItem Quiver { get; set; }
-        public ICollection<GearItem> Other { get; } = new List<GearItem>();
+        public ICollection<GearItem> Other { get; } = [];
 
         public IEnumerable<GearItem> GetAllGear()
         {
@@ -114,16 +112,6 @@ namespace WarriorForeverSim
                 yield return Ranged;
             }
 
-            if (Ammo != null)
-            {
-                yield return Ammo;
-            }
-
-            if (Quiver != null)
-            {
-                yield return Quiver;
-            }
-
             foreach (var x in Other)
             {
                 yield return x;
@@ -135,15 +123,10 @@ namespace WarriorForeverSim
             return GetAllGear().Where(x => x.Enchant != null).Select(x => x.Enchant).ToList();
         }
 
-        public IEnumerable<GearItem> GetAllGems()
-        {
-            return GetAllGear().SelectMany(g => g.Sockets.Select(s => s.Gem)).Where(g => g != null).ToList();
-        }
-
         public double GetStatTotal(Func<GearItem, double> stat)
         {
-            var result = GetAllGear().Sum(g => g.GetStatWithSockets(stat));
-            result += GetAllEnchants().Sum(e => e.GetStatWithSockets(stat));
+            var result = GetAllGear().Sum(g => stat(g));
+            result += GetAllEnchants().Sum(e => stat(e));
 
             return result;
         }
@@ -151,6 +134,11 @@ namespace WarriorForeverSim
         public int GetGearCount(params int[] ids)
         {
             return ids.Count(id => GetAllGear().Any(g => g.Wowhead == id));
+        }
+
+        public bool IsDualWielding()
+        {
+            return MainHand != null && OffHand != null;
         }
     }
 }

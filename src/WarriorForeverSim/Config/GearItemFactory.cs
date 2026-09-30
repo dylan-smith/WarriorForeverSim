@@ -20,7 +20,6 @@ namespace WarriorForeverSim
         private static IEnumerable<GearItem> _equippableOffHand;
         private static IEnumerable<GearItem> _allEnchants;
         private static IEnumerable<GearItem> _twoHandEnchants;
-        private static IEnumerable<GearItem> _allGems;
 
         private static IDictionary<GearType, IEnumerable<GearItem>> _gearByType;
         private static IDictionary<GearType, IEnumerable<GearItem>> _enchantsByType;
@@ -74,19 +73,6 @@ namespace WarriorForeverSim
                 }
 
                 return _allEnchants;
-            }
-        }
-
-        public static IEnumerable<GearItem> AllGems
-        {
-            get
-            {
-                if (_allGems == null)
-                {
-                    LoadAllGear();
-                }
-
-                return _allGems;
             }
         }
 
@@ -217,8 +203,6 @@ namespace WarriorForeverSim
 
         public static GearItem LoadWristEnchant(string enchantName) => GetItem(AllWristEnchants, enchantName);
 
-        public static GearItem LoadGem(string gemName) => GetItem(AllGems, gemName);
-
         private static GearItem GetItem(IEnumerable<GearItem> gearList, string itemName) => gearList.Any(x => x.Name == itemName) ? gearList.Single(x => x.Name == itemName) : throw new ArgumentException($"Unrecognized item name [{itemName}]", nameof(itemName));
 
         private static IEnumerable<GearItem> GetGearByType(GearType gearType)
@@ -246,7 +230,6 @@ namespace WarriorForeverSim
             var assemblyPath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
             var gearPath = Path.Join(assemblyPath, "Gear");
             var enchantsPath = Path.Join(assemblyPath, "Enchants");
-            var gemsPath = Path.Join(assemblyPath, "Gems");
 
             _gearByType = new Dictionary<GearType, IEnumerable<GearItem>>();
             _allGear = new List<GearItem>();
@@ -267,24 +250,10 @@ namespace WarriorForeverSim
             _allGear = _allGear.ToList();
             _allEnchants = _allEnchants.ToList();
 
-            var gems = LoadAllFromDir(gemsPath, GearType.Gem).ToList();
-            gems.AddRange(LoadAllMetaGems());
-            _allGems = gems;
-
             _equippableMainHand = _gearByType[GearType.MainHand].Union(_gearByType[GearType.OneHand]).ToList();
             _equippableOffHand = _gearByType[GearType.OffHand].Union(_gearByType[GearType.OneHand]).ToList();
 
             _twoHandEnchants = _enchantsByType[GearType.TwoHand].Union(_enchantsByType[GearType.OneHand]).ToList();
-        }
-
-        private static IEnumerable<MetaGem> LoadAllMetaGems()
-        {
-            var metaTypes = typeof(MetaGem).Assembly.GetTypes().Where(t => t.IsClass && t.IsSubclassOf(typeof(MetaGem))).ToList();
-
-            foreach (var metaType in metaTypes)
-            {
-                yield return (MetaGem)Activator.CreateInstance(metaType);
-            }
         }
 
         private static IEnumerable<GearItem> LoadAllFromDir(string gearPath, GearType gearType)
@@ -407,33 +376,6 @@ namespace WarriorForeverSim
                     continue;
                 }
 
-                if (statName == "sockets")
-                {
-                    var socketsNode = (YamlMappingNode)statItem.Value;
-
-                    foreach (var socketItem in socketsNode.Children)
-                    {
-                        var socketName = ((YamlScalarNode)socketItem.Key).Value;
-
-                        if (socketName == "bonus")
-                        {
-                            var bonusNode = (YamlMappingNode)socketItem.Value;
-                            result.SocketBonus = LoadGearItem(bonusNode, GearType.SocketBonus);
-                            continue;
-                        }
-
-                        var socketColor = socketName.ToSocketColor();
-                        var socketCount = int.Parse(((YamlScalarNode)socketItem.Value).Value);
-
-                        for (var i = 0; i < socketCount; i++)
-                        {
-                            result.Sockets.Add(new Socket(socketColor));
-                        }
-                    }
-
-                    continue;
-                }
-
                 var prop = result.GetType().GetProperties().Single(p => p.GetCustomAttributes<YamlProperty>().Any(a => a.PropertyName == statName));
 
                 if (prop.PropertyType == typeof(string))
@@ -466,12 +408,6 @@ namespace WarriorForeverSim
                 {
                     var typeValue = ((YamlScalarNode)statItem.Value).Value;
                     prop.SetValue(result, typeValue.ToGearSource());
-                }
-
-                if (prop.PropertyType == typeof(GemColor))
-                {
-                    var typeValue = ((YamlScalarNode)statItem.Value).Value;
-                    prop.SetValue(result, typeValue.ToGemColor());
                 }
 
                 // TODO: in schema specify allowed values for type, source, phase, color, etc

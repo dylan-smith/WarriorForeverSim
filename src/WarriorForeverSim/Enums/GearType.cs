@@ -21,7 +21,5 @@
         Ranged,
         Ammo,
         Quiver,
-        SocketBonus,
-        Gem
     }
 }

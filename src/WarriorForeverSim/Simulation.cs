@@ -11,12 +11,7 @@ namespace WarriorForeverSim
 
         public SimulationState Run()
         {
-            // TODO: Start MP5 events
-            // TODO: Start Spirit events
-            // TODO: Raid DPS
             // TODO: Generate Report/Analysis
-            // TODO: Pet DPS
-            // TODO: Apply aspect of the hawk
 
             if (!State.Validate())
             {
@@ -51,13 +46,12 @@ namespace WarriorForeverSim
 
         private void ExecuteRotation()
         {
-            // TODO: config setting for whether we are responsible for refreshing hunters mark
-            // TODO: config setting for if/when we cast feign death
+            // TODO: config setting for whether we are responsible for refreshing battle shout
             // TODO: config settings for potion usage
             // TODO: configurable reaction time delays for all abilities
-            if (AutoShot.CanUse(State))
+            if (AutoAttack.CanUse(State))
             {
-                AutoShot.Use(State);
+                AutoAttack.Use(State);
             }
         }
 

@@ -5,19 +5,19 @@ namespace WarriorForeverSim
     public enum GearSource
     {
         Dungeon,
-        Gruul,
-        Magtheridon,
-        Karazhan,
-        Badges,
+        MoltenCore,
+        BlackWingLair,
+        TempleOfAhnQiraj,
+        RuinsOfAhnQiraj,
         Crafting,
         Reputation,
         AuctionHouse,
         Vendor,
-        Heroic,
         WorldBoss,
         ZulGurub,
         Naxxramas,
-        Honor
+        Honor,
+        Quest,
     }
 
     public static class GearSourceExtensions
@@ -27,19 +27,19 @@ namespace WarriorForeverSim
             return value switch
             {
                 "dungeon" => GearSource.Dungeon,
-                "gruul" => GearSource.Gruul,
-                "magtheridon" => GearSource.Magtheridon,
-                "karazhan" => GearSource.Karazhan,
-                "badges" => GearSource.Badges,
+                "mc" => GearSource.MoltenCore,
+                "bwl" => GearSource.BlackWingLair,
+                "aq40" => GearSource.TempleOfAhnQiraj,
+                "aq20" => GearSource.RuinsOfAhnQiraj,
                 "crafting" => GearSource.Crafting,
                 "rep" => GearSource.Reputation,
                 "ah" => GearSource.AuctionHouse,
                 "vendor" => GearSource.Vendor,
-                "heroic" => GearSource.Heroic,
                 "worldboss" => GearSource.WorldBoss,
                 "zg" => GearSource.ZulGurub,
                 "naxx" => GearSource.Naxxramas,
                 "honor" => GearSource.Honor,
+                "quest" => GearSource.Quest,
                 _ => throw new ArgumentException($"Unrecognized gear source {value}"),
             };
         }

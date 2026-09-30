@@ -1,0 +1,13 @@
+name: Thunderfury, Blessed Blade of the Windseeker
+speed: 1.9
+mindmg: 44
+maxdmg: 115
+type: sword
+agility: 5
+stamina: 8
+fireresist: 8
+natureresist: 9
+unique: true
+wowhead: 19019
+source: mc
+phase: 1

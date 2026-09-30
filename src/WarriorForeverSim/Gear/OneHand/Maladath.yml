@@ -1,0 +1,10 @@
+name: Maladath, Runed Blade of the Black Flight
+speed: 2.2
+mindmg: 86
+maxdmg: 162
+type: sword
+sword-skill: 4
+unique: true
+wowhead: 19351
+source: bwl
+phase: 3
