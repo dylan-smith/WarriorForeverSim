@@ -44,4 +44,4 @@ CI (`.github/workflows/ci.yml`) fails on any `.editorconfig` rule at `warning` s
 
 ## Tests
 
-Tests mirror the domain, not the source tree: `TalentTests/`, `BuffTests/`, `AuraTests/`, `ProcTests/`, `MetaGemTests/`, `GearSetTests/`, plus `StatCalculatorTests.cs`, `SimulationTests.cs`, `ConfigValidationTests.cs`. Most tests build a bare `SimulationState`, set a race/talent/buff, and assert a calculator result. Expected base stats live in `Constants.cs` (Draenei is the reference race). Tests that inject mocks must clear them or they leak into other tests in the same run.
+Tests mirror the domain, not the source tree: `TalentTests/`, `BuffTests/`, `AuraTests/`, `ProcTests/`, `MetaGemTests/`, `GearSetTests/`, plus `StatCalculatorTests/` (one class per calculator), `SimulationTests.cs`, `ConfigValidationTests.cs`. Most tests build a bare `SimulationState`, set a race/talent/buff, and assert a calculator result. Expected base stats live in `Constants.cs` (Draenei is the reference race). Tests that inject mocks must clear them or they leak into other tests in the same run.

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
 
 namespace WarriorForeverSim
@@ -28,15 +29,17 @@ namespace WarriorForeverSim
 
             double autoAttackDamage;
             DamageType damageType;
-            double? critRoll = null;
             var damageDetails = new List<(string Label, string Value)>();
 
+            // White hits make a single roll against one attack table: miss, then crit, then hit.
+            // Crit is pushed off the table when the entries above it leave it no room.
             var missChance = MissChanceCalculator.Calculate(weapon, state);
-            var critChance = MeleeCritCalculator.Calculate(weapon, state);
+            var critChance = Math.Min(CritCalculator.Calculate(weapon, state), 1 - missChance);
+            var hitChance = 1 - missChance - critChance;
 
-            var missRoll = RandomGenerator.Roll(RollType.MeleeMiss);
+            var attackRoll = RandomGenerator.Roll(RollType.MeleeAttackTable);
 
-            if (missRoll <= missChance)
+            if (attackRoll <= missChance)
             {
                 autoAttackDamage = 0.0;
                 damageType = DamageType.Miss;
@@ -62,11 +65,7 @@ namespace WarriorForeverSim
                     ("Damage multiplier", Multiplier(damageMultiplier)),
                 ];
 
-                // Assuming crit uses a 2-roll system as per this article:
-                // https://wowwiki-archive.fandom.com/wiki/Attack_table#Ranged_attacks
-                critRoll = RandomGenerator.Roll(RollType.MeleeCrit);
-
-                if (critRoll <= critChance)
+                if (attackRoll <= missChance + critChance)
                 {
                     var critDamageMultiplier = MeleeCritDamageMultiplierCalculator.Calculate(state);
 
@@ -80,20 +79,10 @@ namespace WarriorForeverSim
 
             // TODO: Boss armor reduction
 
-            var critRollChance = critChance;
-
-            // TODO: If we do these calcs earlier we can do just one roll instead of 2
-            critChance *= (1 - missChance);
-            var hitChance = 1 - missChance - critChance;
-
             DamageEvent = new DamageEvent(Timestamp, autoAttackDamage, damageType, missChance, critChance, hitChance)
             {
-                MissRoll = missRoll,
-                CritRoll = critRoll,
-                CritRollChance = critRollChance,
+                AttackRoll = attackRoll,
             };
-
-            DamageEvent.AddDetail("Attack table", "Outcome chances", $"Hit {Percent(hitChance)} · Crit {Percent(critChance)} · Miss {Percent(missChance)}");
 
             foreach (var (label, value) in damageDetails)
             {
@@ -113,7 +102,5 @@ namespace WarriorForeverSim
         private static string Number(double value) => value.ToString("F1", CultureInfo.InvariantCulture);
 
         private static string Multiplier(double value) => "×" + value.ToString("0.###", CultureInfo.InvariantCulture);
-
-        private static string Percent(double value) => (value * 100).ToString("F1", CultureInfo.InvariantCulture) + "%";
     }
 }

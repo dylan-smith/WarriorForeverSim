@@ -261,8 +261,8 @@ namespace WarriorForeverSim.Tests.AbilityTests
             };
 
             BaseStatCalculator.InjectMock(typeof(MissChanceCalculator), new FakeStatCalculator(0.09));
-            BaseStatCalculator.InjectMock(typeof(MeleeCritCalculator), new FakeStatCalculator(0.20));
-            RandomGenerator.InjectMock(new FakeRandomGenerator(0.091, 0.19));
+            BaseStatCalculator.InjectMock(typeof(CritCalculator), new FakeStatCalculator(0.20));
+            RandomGenerator.InjectMock(new FakeRandomGenerator(0.19));
 
             var e = new AutoAttackSwingEvent(7.2);
 
@@ -274,8 +274,8 @@ namespace WarriorForeverSim.Tests.AbilityTests
             Assert.AreEqual(300, dmg.Damage);
             Assert.AreEqual(DamageType.Crit, dmg.DamageType);
             Assert.AreEqual(0.09, dmg.MissChance, 0.001);
-            Assert.AreEqual(0.182, dmg.CritChance, 0.0001);
-            Assert.AreEqual(0.728, dmg.HitChance, 0.0001);
+            Assert.AreEqual(0.20, dmg.CritChance, 0.0001);
+            Assert.AreEqual(0.71, dmg.HitChance, 0.0001);
         }
 
         [TestMethod]
@@ -290,9 +290,9 @@ namespace WarriorForeverSim.Tests.AbilityTests
                 MaxDamage = 200,
             };
 
-            BaseStatCalculator.InjectMock(typeof(MeleeCritCalculator), new FakeStatCalculator(0.20));
+            BaseStatCalculator.InjectMock(typeof(CritCalculator), new FakeStatCalculator(0.20));
             BaseStatCalculator.InjectMock(typeof(MeleeCritDamageMultiplierCalculator), new FakeStatCalculator(1.03));
-            RandomGenerator.InjectMock(new FakeRandomGenerator(0.5, 0.19));
+            RandomGenerator.InjectMock(new FakeRandomGenerator(0.19));
 
             var e = new AutoAttackSwingEvent(7.2);
 
@@ -305,7 +305,7 @@ namespace WarriorForeverSim.Tests.AbilityTests
         }
 
         [TestMethod]
-        public void AutoAttackSwingEventUsesMeleeRollTypes()
+        public void AutoAttackSwingEventUsesMeleeAttackTableRollType()
         {
             var state = new SimulationState();
             state.Config.Gear.MainHand = new GearItem
@@ -317,12 +317,11 @@ namespace WarriorForeverSim.Tests.AbilityTests
             };
 
             BaseStatCalculator.InjectMock(typeof(MissChanceCalculator), new FakeStatCalculator(0.09));
-            BaseStatCalculator.InjectMock(typeof(MeleeCritCalculator), new FakeStatCalculator(0.20));
+            BaseStatCalculator.InjectMock(typeof(CritCalculator), new FakeStatCalculator(0.20));
 
-            // Only the melee roll types are scripted; any other roll type would fall back to 0.0 and produce a miss.
+            // Only the attack table roll type is scripted; any other roll type would fall back to 0.0 and produce a miss.
             var rng = new FakeRandomGenerator();
-            rng.SetRolls(RollType.MeleeMiss, 0.5);
-            rng.SetRolls(RollType.MeleeCrit, 0.5);
+            rng.SetRolls(RollType.MeleeAttackTable, 0.5);
             RandomGenerator.InjectMock(rng);
 
             var e = new AutoAttackSwingEvent(7.2);
@@ -372,9 +371,9 @@ namespace WarriorForeverSim.Tests.AbilityTests
             };
 
             BaseStatCalculator.InjectMock(typeof(MissChanceCalculator), new FakeStatCalculator(0.09));
-            BaseStatCalculator.InjectMock(typeof(MeleeCritCalculator), new FakeStatCalculator(0.20));
+            BaseStatCalculator.InjectMock(typeof(CritCalculator), new FakeStatCalculator(0.20));
             BaseStatCalculator.InjectMock(typeof(MeleeAttackPowerCalculator), new FakeStatCalculator(1400));
-            RandomGenerator.InjectMock(new FakeRandomGenerator(0.5, 0.75));
+            RandomGenerator.InjectMock(new FakeRandomGenerator(0.5));
 
             var e = new AutoAttackSwingEvent(7.2);
 
@@ -383,10 +382,8 @@ namespace WarriorForeverSim.Tests.AbilityTests
             var dmg = e.DamageEvent;
 
             Assert.AreEqual(DamageType.Hit, dmg.DamageType);
-            Assert.AreEqual(0.5, dmg.MissRoll);
-            Assert.AreEqual(0.75, dmg.CritRoll);
-            Assert.AreEqual(0.20, dmg.CritRollChance);
-            Assert.AreEqual("Hit 72.8% · Crit 18.2% · Miss 9.0%", Detail(dmg, "Attack table", "Outcome chances"));
+            Assert.AreEqual(0.5, dmg.AttackRoll);
+            Assert.IsFalse(dmg.Details.Any(d => d.Section == "Attack table"));
             Assert.AreEqual("150.0", Detail(dmg, "Damage", "Weapon damage (avg)"));
             Assert.AreEqual("1400", Detail(dmg, "Damage", "Attack power"));
             Assert.AreEqual("260.0", Detail(dmg, "Damage", "Attack power bonus"));
@@ -405,9 +402,9 @@ namespace WarriorForeverSim.Tests.AbilityTests
                 MaxDamage = 200,
             };
 
-            BaseStatCalculator.InjectMock(typeof(MeleeCritCalculator), new FakeStatCalculator(0.20));
+            BaseStatCalculator.InjectMock(typeof(CritCalculator), new FakeStatCalculator(0.20));
             BaseStatCalculator.InjectMock(typeof(MeleeCritDamageMultiplierCalculator), new FakeStatCalculator(1.03));
-            RandomGenerator.InjectMock(new FakeRandomGenerator(0.5, 0.19));
+            RandomGenerator.InjectMock(new FakeRandomGenerator(0.19));
 
             var e = new AutoAttackSwingEvent(7.2);
 
@@ -416,7 +413,7 @@ namespace WarriorForeverSim.Tests.AbilityTests
             var dmg = e.DamageEvent;
 
             Assert.AreEqual(DamageType.Crit, dmg.DamageType);
-            Assert.AreEqual(0.19, dmg.CritRoll);
+            Assert.AreEqual(0.19, dmg.AttackRoll);
             Assert.AreEqual("×2.06", Detail(dmg, "Damage", "Crit multiplier"));
             Assert.AreEqual("309.0", Detail(dmg, "Damage", "Final damage"));
         }
@@ -442,10 +439,58 @@ namespace WarriorForeverSim.Tests.AbilityTests
             var dmg = e.DamageEvent;
 
             Assert.AreEqual(DamageType.Miss, dmg.DamageType);
-            Assert.AreEqual(0.089, dmg.MissRoll);
-            Assert.IsNull(dmg.CritRoll);
-            Assert.AreEqual("Hit 91.0% · Crit 0.0% · Miss 9.0%", Detail(dmg, "Attack table", "Outcome chances"));
+            Assert.AreEqual(0.089, dmg.AttackRoll);
             Assert.IsFalse(dmg.Details.Any(d => d.Section == "Damage"));
+        }
+
+        [TestMethod]
+        public void AutoAttackSwingEventCritPushedOffTable()
+        {
+            var state = new SimulationState();
+            state.Config.Gear.MainHand = new GearItem
+            {
+                Speed = 2.6,
+                MinDamage = 100,
+                MaxDamage = 200,
+            };
+
+            BaseStatCalculator.InjectMock(typeof(MissChanceCalculator), new FakeStatCalculator(0.6));
+            BaseStatCalculator.InjectMock(typeof(CritCalculator), new FakeStatCalculator(0.5));
+            RandomGenerator.InjectMock(new FakeRandomGenerator(0.99));
+
+            var e = new AutoAttackSwingEvent(7.2);
+
+            e.ProcessEvent(state);
+
+            var dmg = e.DamageEvent;
+
+            // miss takes 60% of the table, leaving only 40% for crit and nothing for hit
+            Assert.AreEqual(DamageType.Crit, dmg.DamageType);
+            Assert.AreEqual(0.6, dmg.MissChance, 0.0001);
+            Assert.AreEqual(0.4, dmg.CritChance, 0.0001);
+            Assert.AreEqual(0.0, dmg.HitChance, 0.0001);
+        }
+
+        [TestMethod]
+        public void AutoAttackSwingEventRollOnMissBoundaryIsMiss()
+        {
+            var state = new SimulationState();
+            state.Config.Gear.MainHand = new GearItem
+            {
+                Speed = 2.6,
+                MinDamage = 100,
+                MaxDamage = 200,
+            };
+
+            BaseStatCalculator.InjectMock(typeof(MissChanceCalculator), new FakeStatCalculator(0.09));
+            BaseStatCalculator.InjectMock(typeof(CritCalculator), new FakeStatCalculator(0.20));
+            RandomGenerator.InjectMock(new FakeRandomGenerator(0.09));
+
+            var e = new AutoAttackSwingEvent(7.2);
+
+            e.ProcessEvent(state);
+
+            Assert.AreEqual(DamageType.Miss, e.DamageEvent.DamageType);
         }
 
         private static string Detail(EventInfo e, string section, string label) => e.Details.Single(d => d.Section == section && d.Label == label).Value;
@@ -457,7 +502,7 @@ namespace WarriorForeverSim.Tests.AbilityTests
             BaseStatCalculator.InjectMock(typeof(AgilityCalculator), zeroMock);
             BaseStatCalculator.InjectMock(typeof(DamageMultiplierCalculator), new FakeStatCalculator(1.0));
             BaseStatCalculator.InjectMock(typeof(MeleeAttackPowerCalculator), zeroMock);
-            BaseStatCalculator.InjectMock(typeof(MeleeCritCalculator), zeroMock);
+            BaseStatCalculator.InjectMock(typeof(CritCalculator), zeroMock);
             BaseStatCalculator.InjectMock(typeof(MeleeCritDamageMultiplierCalculator), new FakeStatCalculator(1.0));
             BaseStatCalculator.InjectMock(typeof(MeleeHasteCalculator), new FakeStatCalculator(1.0));
             BaseStatCalculator.InjectMock(typeof(MissChanceCalculator), zeroMock);

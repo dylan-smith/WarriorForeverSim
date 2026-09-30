@@ -51,12 +51,6 @@
     "crit": {
       "type": "integer"
     },
-    "rangedcrit": {
-      "type": "integer"
-    },
-    "meleecrit": {
-      "type": "integer"
-    },
     "hit": {
       "type": "integer"
     },
@@ -88,15 +82,6 @@
       "type": "integer"
     },
     "threat": {
-      "type": "integer"
-    },
-    "stealth": {
-      "type": "integer"
-    },
-    "rangedbonusdps": {
-      "type": "number"
-    },
-    "rangedbonusdmg": {
       "type": "integer"
     },
     "type": {

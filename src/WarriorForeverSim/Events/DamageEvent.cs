@@ -8,11 +8,9 @@
         public readonly double CritChance;
         public readonly double HitChance;
 
-        // Raw attack-table rolls, for display. CritRoll is null when the attack missed;
-        // CritRollChance is the crit chance the crit roll was compared against.
-        public double? MissRoll { get; init; }
-        public double? CritRoll { get; init; }
-        public double? CritRollChance { get; init; }
+        // The raw attack-table roll, for display. Miss, crit and hit chances are the widths of
+        // consecutive table segments starting at 0, and the roll landed in one of them.
+        public double? AttackRoll { get; init; }
 
         public DamageEvent(double timestamp, double damage, DamageType damageType, double missChance, double critChance, double hitChance) : base(timestamp)
         {

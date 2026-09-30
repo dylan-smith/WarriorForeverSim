@@ -99,9 +99,6 @@ mp5: 22
 defense: 23
 
 threat: 24
-stealth: 25
-rangedbonusdps: 26
-rangedbonusdmg: 27
 type: dagger
 bow-skill: 28
 crossbow-skill: 29
@@ -152,9 +149,6 @@ source: naxx
             Assert.AreEqual(23.0, result.Defense);
 
             Assert.AreEqual(-0.24, result.ThreatDecrease);
-            Assert.AreEqual(25.0, result.Stealth);
-            Assert.AreEqual(26.0, result.RangedBonusDPS);
-            Assert.AreEqual(27.0, result.RangedBonusDamage);
             Assert.AreEqual(WeaponType.Dagger, result.WeaponType);
             Assert.AreEqual(28.0, result.WeaponSkill[WeaponType.Bow]);
             Assert.AreEqual(29.0, result.WeaponSkill[WeaponType.Crossbow]);
