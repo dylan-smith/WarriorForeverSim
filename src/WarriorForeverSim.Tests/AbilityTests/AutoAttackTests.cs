@@ -493,6 +493,129 @@ namespace WarriorForeverSim.Tests.AbilityTests
             Assert.AreEqual(DamageType.Miss, e.DamageEvent.DamageType);
         }
 
+        [TestMethod]
+        public void AutoAttackSwingEventDodge()
+        {
+            var state = new SimulationState();
+            state.Config.Gear.MainHand = new GearItem
+            {
+                Speed = 2.6,
+                MinDamage = 100,
+                MaxDamage = 200,
+            };
+
+            BaseStatCalculator.InjectMock(typeof(MissChanceCalculator), new FakeStatCalculator(0.08));
+            BaseStatCalculator.InjectMock(typeof(DodgeChanceCalculator), new FakeStatCalculator(0.065));
+            BaseStatCalculator.InjectMock(typeof(GlancingChanceCalculator), new FakeStatCalculator(0.4));
+            RandomGenerator.InjectMock(new FakeRandomGenerator(0.1));
+
+            var e = new AutoAttackSwingEvent(7.2);
+
+            e.ProcessEvent(state);
+
+            var dmg = e.DamageEvent;
+
+            Assert.AreEqual(DamageType.Dodge, dmg.DamageType);
+            Assert.AreEqual(0, dmg.Damage);
+            Assert.AreEqual(0.065, dmg.DodgeChance, 0.0001);
+            Assert.IsFalse(dmg.Details.Any(d => d.Section == "Damage"));
+
+            // A dodge still starts the swing timer
+            Assert.IsTrue(state.Auras.Contains(Aura.SwingTimerCooldown));
+            Assert.AreEqual(1, state.Events.OfType<SwingTimerCompletedEvent>().Count());
+        }
+
+        [TestMethod]
+        public void AutoAttackSwingEventGlancing()
+        {
+            var state = new SimulationState();
+            state.Config.Gear.MainHand = new GearItem
+            {
+                Speed = 2.6,
+                MinDamage = 100,
+                MaxDamage = 200,
+            };
+
+            BaseStatCalculator.InjectMock(typeof(MissChanceCalculator), new FakeStatCalculator(0.08));
+            BaseStatCalculator.InjectMock(typeof(DodgeChanceCalculator), new FakeStatCalculator(0.065));
+            BaseStatCalculator.InjectMock(typeof(GlancingChanceCalculator), new FakeStatCalculator(0.4));
+            BaseStatCalculator.InjectMock(typeof(CritCalculator), new FakeStatCalculator(0.2));
+            BaseStatCalculator.InjectMock(typeof(GlancingDamageCalculator), new FakeStatCalculator(0.65));
+            RandomGenerator.InjectMock(new FakeRandomGenerator(0.5));
+
+            var e = new AutoAttackSwingEvent(7.2);
+
+            e.ProcessEvent(state);
+
+            var dmg = e.DamageEvent;
+
+            Assert.AreEqual(DamageType.Glancing, dmg.DamageType);
+            Assert.AreEqual(97.5, dmg.Damage, 0.001); // 150 * 0.65
+            Assert.AreEqual(0.08, dmg.MissChance, 0.0001);
+            Assert.AreEqual(0.065, dmg.DodgeChance, 0.0001);
+            Assert.AreEqual(0.4, dmg.GlancingChance, 0.0001);
+            Assert.AreEqual(0.2, dmg.CritChance, 0.0001);
+            Assert.AreEqual(0.255, dmg.HitChance, 0.0001);
+            Assert.AreEqual("×0.65", Detail(dmg, "Damage", "Glancing multiplier"));
+            Assert.AreEqual("97.5", Detail(dmg, "Damage", "Final damage"));
+            Assert.IsFalse(dmg.Details.Any(d => d.Label == "Crit multiplier"));
+        }
+
+        [TestMethod]
+        public void AutoAttackSwingEventGlancingAppliesDamageMultiplier()
+        {
+            var state = new SimulationState();
+            state.Config.Gear.MainHand = new GearItem
+            {
+                Speed = 2.6,
+                MinDamage = 100,
+                MaxDamage = 200,
+            };
+
+            BaseStatCalculator.InjectMock(typeof(GlancingChanceCalculator), new FakeStatCalculator(0.4));
+            BaseStatCalculator.InjectMock(typeof(GlancingDamageCalculator), new FakeStatCalculator(0.85));
+            BaseStatCalculator.InjectMock(typeof(MeleeAttackPowerCalculator), new FakeStatCalculator(1400));
+            BaseStatCalculator.InjectMock(typeof(DamageMultiplierCalculator), new FakeStatCalculator(1.1));
+            RandomGenerator.InjectMock(new FakeRandomGenerator(0.3));
+
+            var e = new AutoAttackSwingEvent(7.2);
+
+            e.ProcessEvent(state);
+
+            // (150 + 260) * 1.1 * 0.85
+            Assert.AreEqual(DamageType.Glancing, e.DamageEvent.DamageType);
+            Assert.AreEqual(383.35, e.DamageEvent.Damage, 0.001);
+        }
+
+        [TestMethod]
+        public void AutoAttackSwingEventGlancingPushesCritOffTable()
+        {
+            var state = new SimulationState();
+            state.Config.Gear.MainHand = new GearItem
+            {
+                Speed = 2.6,
+                MinDamage = 100,
+                MaxDamage = 200,
+            };
+
+            BaseStatCalculator.InjectMock(typeof(MissChanceCalculator), new FakeStatCalculator(0.08));
+            BaseStatCalculator.InjectMock(typeof(DodgeChanceCalculator), new FakeStatCalculator(0.065));
+            BaseStatCalculator.InjectMock(typeof(GlancingChanceCalculator), new FakeStatCalculator(0.4));
+            BaseStatCalculator.InjectMock(typeof(CritCalculator), new FakeStatCalculator(0.6));
+            RandomGenerator.InjectMock(new FakeRandomGenerator(0.99));
+
+            var e = new AutoAttackSwingEvent(7.2);
+
+            e.ProcessEvent(state);
+
+            var dmg = e.DamageEvent;
+
+            // miss, dodge and glancing take 54.5% of the table, capping crit at 45.5% with no room for hit
+            Assert.AreEqual(DamageType.Crit, dmg.DamageType);
+            Assert.AreEqual(0.455, dmg.CritChance, 0.0001);
+            Assert.AreEqual(0.0, dmg.HitChance, 0.0001);
+        }
+
         private static string Detail(EventInfo e, string section, string label) => e.Details.Single(d => d.Section == section && d.Label == label).Value;
 
         private void InjectZeroMocks()
@@ -503,6 +626,9 @@ namespace WarriorForeverSim.Tests.AbilityTests
             BaseStatCalculator.InjectMock(typeof(DamageMultiplierCalculator), new FakeStatCalculator(1.0));
             BaseStatCalculator.InjectMock(typeof(MeleeAttackPowerCalculator), zeroMock);
             BaseStatCalculator.InjectMock(typeof(CritCalculator), zeroMock);
+            BaseStatCalculator.InjectMock(typeof(DodgeChanceCalculator), zeroMock);
+            BaseStatCalculator.InjectMock(typeof(GlancingChanceCalculator), zeroMock);
+            BaseStatCalculator.InjectMock(typeof(GlancingDamageCalculator), new FakeStatCalculator(1.0));
             BaseStatCalculator.InjectMock(typeof(MeleeCritDamageMultiplierCalculator), new FakeStatCalculator(1.0));
             BaseStatCalculator.InjectMock(typeof(MeleeHasteCalculator), new FakeStatCalculator(1.0));
             BaseStatCalculator.InjectMock(typeof(MissChanceCalculator), zeroMock);

@@ -10,6 +10,8 @@
         double AverageHits,
         double AverageCrits,
         double AverageMisses,
+        double AverageDodges,
+        double AverageGlancings,
         IReadOnlyList<string> Warnings,
         IReadOnlyList<string> Errors,
         IReadOnlyList<SimulationLogEntry> FirstRunLog);

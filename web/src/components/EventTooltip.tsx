@@ -27,19 +27,23 @@ function groupBySection(details: EventDetail[]) {
 interface AttackTableBarProps {
   roll: number
   missChance: number
+  dodgeChance: number
+  glancingChance: number
   critChance: number
   outcome: DamageType
 }
 
-// The single-roll attack table as a 0–100% bar: consecutive miss, crit and hit segments,
-// with a marker at the roll showing which segment it landed in, and a legend in the same
-// order and colors.
-function AttackTableBar({ roll, missChance, critChance, outcome }: AttackTableBarProps) {
+// The single-roll attack table as a 0–100% bar: consecutive miss, dodge, glancing, crit and
+// hit segments, with a marker at the roll showing which segment it landed in, and a legend in
+// the same order and colors.
+function AttackTableBar({ roll, missChance, dodgeChance, glancingChance, critChance, outcome }: AttackTableBarProps) {
   const clamp = (value: number) => Math.min(Math.max(value, 0), 1)
   const segments = [
     { kind: 'miss', label: 'Miss', chance: clamp(missChance) },
+    { kind: 'dodge', label: 'Dodge', chance: clamp(dodgeChance) },
+    { kind: 'glancing', label: 'Glancing', chance: clamp(glancingChance) },
     { kind: 'crit', label: 'Crit', chance: clamp(critChance) },
-    { kind: 'hit', label: 'Hit', chance: clamp(1 - missChance - critChance) },
+    { kind: 'hit', label: 'Hit', chance: clamp(1 - missChance - dodgeChance - glancingChance - critChance) },
   ]
   let start = 0
 
@@ -100,12 +104,19 @@ export function EventTooltip({ entry, anchor }: EventTooltipProps) {
   }, [anchor, entry])
 
   const attackTable =
-    entry.attackRoll !== null && entry.missChance !== null && entry.critChance !== null && entry.damageType !== null ? (
+    entry.attackRoll !== null &&
+    entry.missChance !== null &&
+    entry.dodgeChance !== null &&
+    entry.glancingChance !== null &&
+    entry.critChance !== null &&
+    entry.damageType !== null ? (
       <div className="tooltip-section">
         <h3>Attack table</h3>
         <AttackTableBar
           roll={entry.attackRoll}
           missChance={entry.missChance}
+          dodgeChance={entry.dodgeChance}
+          glancingChance={entry.glancingChance}
           critChance={entry.critChance}
           outcome={entry.damageType}
         />

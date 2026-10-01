@@ -30,7 +30,8 @@ export function Results({ result, error, running }: ResultsProps) {
     )
   }
 
-  const swings = result.averageHits + result.averageCrits + result.averageMisses
+  const swings =
+    result.averageHits + result.averageCrits + result.averageGlancings + result.averageDodges + result.averageMisses
 
   return (
     <section className={`card results${running ? ' stale' : ''}`} aria-busy={running}>
@@ -58,6 +59,14 @@ export function Results({ result, error, running }: ResultsProps) {
             <div>
               <dt>Crit</dt>
               <dd>{percent(result.averageCrits, swings)}</dd>
+            </div>
+            <div>
+              <dt>Glancing</dt>
+              <dd>{percent(result.averageGlancings, swings)}</dd>
+            </div>
+            <div>
+              <dt>Dodge</dt>
+              <dd>{percent(result.averageDodges, swings)}</dd>
             </div>
             <div>
               <dt>Miss</dt>

@@ -10,6 +10,8 @@ namespace WarriorForeverSim
         public double? Damage { get; }
         public DamageType? DamageType { get; }
         public double? MissChance { get; }
+        public double? DodgeChance { get; }
+        public double? GlancingChance { get; }
         public double? CritChance { get; }
         public double? AttackRoll { get; }
         public double TotalDamage { get; }
@@ -30,6 +32,8 @@ namespace WarriorForeverSim
                 Damage = damageEvent.Damage;
                 DamageType = damageEvent.DamageType;
                 MissChance = damageEvent.MissChance;
+                DodgeChance = damageEvent.DodgeChance;
+                GlancingChance = damageEvent.GlancingChance;
                 CritChance = damageEvent.CritChance;
                 AttackRoll = damageEvent.AttackRoll;
             }

@@ -72,7 +72,7 @@
 
                     if (report.Errors.Count > 0)
                     {
-                        return new SimulateResponse(0, 0, 0, 0, 0, 0, 0, report.Warnings, report.Errors, []);
+                        return new SimulateResponse(0, 0, 0, 0, 0, 0, 0, 0, 0, report.Warnings, report.Errors, []);
                     }
 
                     if (i == 0)
@@ -91,6 +91,8 @@
                     reports.Average(r => r.Hits),
                     reports.Average(r => r.Crits),
                     reports.Average(r => r.Misses),
+                    reports.Average(r => r.Dodges),
+                    reports.Average(r => r.Glancings),
                     reports[0].Warnings,
                     reports[0].Errors,
                     firstRunLog);
