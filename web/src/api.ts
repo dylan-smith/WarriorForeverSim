@@ -14,12 +14,14 @@ export interface SimulateResponse {
   averageHits: number
   averageCrits: number
   averageMisses: number
+  averageDodges: number
+  averageGlancings: number
   warnings: string[]
   errors: string[]
   firstRunLog: SimulationLogEntry[]
 }
 
-export type DamageType = 'Hit' | 'Crit' | 'Miss'
+export type DamageType = 'Hit' | 'Crit' | 'Glancing' | 'Dodge' | 'Miss'
 
 export interface SimulationLogEntry {
   timestamp: number
@@ -28,6 +30,8 @@ export interface SimulationLogEntry {
   damage: number | null
   damageType: DamageType | null
   missChance: number | null
+  dodgeChance: number | null
+  glancingChance: number | null
   critChance: number | null
   attackRoll: number | null
   totalDamage: number

@@ -10,16 +10,20 @@ namespace WarriorForeverSim
         public int Hits { get; }
         public int Crits { get; }
         public int Misses { get; }
+        public int Dodges { get; }
+        public int Glancings { get; }
         public IReadOnlyList<string> Warnings { get; }
         public IReadOnlyList<string> Errors { get; }
 
-        private SimulationReport(double totalDamage, double dps, int hits, int crits, int misses, IReadOnlyList<string> warnings, IReadOnlyList<string> errors)
+        private SimulationReport(double totalDamage, double dps, int hits, int crits, int misses, int dodges, int glancings, IReadOnlyList<string> warnings, IReadOnlyList<string> errors)
         {
             TotalDamage = totalDamage;
             Dps = dps;
             Hits = hits;
             Crits = crits;
             Misses = misses;
+            Dodges = dodges;
+            Glancings = glancings;
             Warnings = warnings;
             Errors = errors;
         }
@@ -37,6 +41,8 @@ namespace WarriorForeverSim
                 damageEvents.Count(e => e.DamageType == DamageType.Hit),
                 damageEvents.Count(e => e.DamageType == DamageType.Crit),
                 damageEvents.Count(e => e.DamageType == DamageType.Miss),
+                damageEvents.Count(e => e.DamageType == DamageType.Dodge),
+                damageEvents.Count(e => e.DamageType == DamageType.Glancing),
                 state.Warnings.ToList(),
                 state.Errors.ToList());
         }

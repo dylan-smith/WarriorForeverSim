@@ -11,6 +11,8 @@
   --error-bg: #fde3e3;
   --error-text: #9b1c1c;
   --outcome-miss: #d9574f;
+  --outcome-dodge: #e0a030;
+  --outcome-glancing: #4a8fd4;
   --outcome-crit: #2f9e44;
   --outcome-hit: #b3aca3;
 
@@ -33,6 +35,8 @@
     --error-bg: #3d1a1a;
     --error-text: #f3a3a3;
     --outcome-miss: #e3685f;
+    --outcome-dodge: #e8b54a;
+    --outcome-glancing: #6aa8e8;
     --outcome-crit: #4cc764;
     --outcome-hit: #6f6861;
   }
@@ -270,6 +274,7 @@ h2 {
 }
 
 .row-miss td,
+.row-dodge td,
 .row-other td {
   color: var(--muted);
 }
@@ -405,6 +410,16 @@ h2 {
   font-weight: 600;
 }
 
+.roll-result.dodge {
+  color: var(--outcome-dodge);
+  font-weight: 600;
+}
+
+.roll-result.glancing {
+  color: var(--outcome-glancing);
+  font-weight: 600;
+}
+
 .roll-result.crit {
   color: var(--outcome-crit);
   font-weight: 600;
@@ -428,6 +443,16 @@ h2 {
 .roll-zone.miss,
 .roll-swatch.miss {
   background: var(--outcome-miss);
+}
+
+.roll-zone.dodge,
+.roll-swatch.dodge {
+  background: var(--outcome-dodge);
+}
+
+.roll-zone.glancing,
+.roll-swatch.glancing {
+  background: var(--outcome-glancing);
 }
 
 .roll-zone.crit,

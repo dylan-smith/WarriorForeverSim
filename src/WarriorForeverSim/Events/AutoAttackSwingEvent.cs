@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Globalization;
 
 namespace WarriorForeverSim
@@ -27,24 +26,15 @@ namespace WarriorForeverSim
             AddDetail("Swing", "Swing speed", Seconds(swingSpeed));
             AddDetail("Swing", "Next swing ready at", Seconds(Timestamp + swingSpeed));
 
-            double autoAttackDamage;
-            DamageType damageType;
+            var autoAttackDamage = 0.0;
             var damageDetails = new List<(string Label, string Value)>();
 
-            // White hits make a single roll against one attack table: miss, then crit, then hit.
-            // Crit is pushed off the table when the entries above it leave it no room.
-            var missChance = MissChanceCalculator.Calculate(weapon, state);
-            var critChance = Math.Min(CritCalculator.Calculate(weapon, state), 1 - missChance);
-            var hitChance = 1 - missChance - critChance;
-
+            // White hits make a single roll against one attack table: miss, dodge, glancing, crit, then hit.
+            var attackTable = AttackTable.ForWhiteHit(weapon, state);
             var attackRoll = RandomGenerator.Roll(RollType.MeleeAttackTable);
+            var damageType = attackTable.Resolve(attackRoll);
 
-            if (attackRoll <= missChance)
-            {
-                autoAttackDamage = 0.0;
-                damageType = DamageType.Miss;
-            }
-            else
+            if (damageType is not (DamageType.Miss or DamageType.Dodge))
             {
                 var meleeAP = MeleeAttackPowerCalculator.Calculate(state);
                 var weaponDamage = (weapon.MinDamage + weapon.MaxDamage) / 2;
@@ -55,8 +45,6 @@ namespace WarriorForeverSim
                 autoAttackDamage += attackPowerBonus;
                 autoAttackDamage *= damageMultiplier;
 
-                damageType = DamageType.Hit;
-
                 damageDetails =
                 [
                     ("Weapon damage (avg)", Number(weaponDamage)),
@@ -65,13 +53,20 @@ namespace WarriorForeverSim
                     ("Damage multiplier", Multiplier(damageMultiplier)),
                 ];
 
-                if (attackRoll <= missChance + critChance)
+                if (damageType == DamageType.Glancing)
+                {
+                    var glancingDamageMultiplier = GlancingDamageCalculator.Calculate(weapon, state);
+
+                    autoAttackDamage *= glancingDamageMultiplier;
+
+                    damageDetails.Add(("Glancing multiplier", Multiplier(glancingDamageMultiplier)));
+                }
+                else if (damageType == DamageType.Crit)
                 {
                     var critDamageMultiplier = MeleeCritDamageMultiplierCalculator.Calculate(state);
 
                     autoAttackDamage *= 2;
                     autoAttackDamage *= critDamageMultiplier;
-                    damageType = DamageType.Crit;
 
                     damageDetails.Add(("Crit multiplier", Multiplier(2 * critDamageMultiplier)));
                 }
@@ -79,7 +74,7 @@ namespace WarriorForeverSim
 
             // TODO: Boss armor reduction
 
-            DamageEvent = new DamageEvent(Timestamp, autoAttackDamage, damageType, missChance, critChance, hitChance)
+            DamageEvent = new DamageEvent(Timestamp, autoAttackDamage, damageType, attackTable)
             {
                 AttackRoll = attackRoll,
             };
@@ -89,7 +84,7 @@ namespace WarriorForeverSim
                 DamageEvent.AddDetail("Damage", label, value);
             }
 
-            if (damageType != DamageType.Miss)
+            if (damageDetails.Count > 0)
             {
                 DamageEvent.AddDetail("Damage", "Final damage", Number(autoAttackDamage));
             }
