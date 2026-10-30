@@ -123,7 +123,7 @@ jobs:
       working-directory: src
 
     - name: Publish Test Results
-      uses: EnricoMi/publish-unit-test-result-action@d0a4676d0e0b938bc201470d88276b7c74c712b3 # v2.24.0
+      uses: EnricoMi/publish-unit-test-result-action@7622c5bf3d112a72ab4fa3951c2aa5723d8ab92d # v2.25.0
       if: always()
       with:
         check_name: Unit Test Results
@@ -135,7 +135,7 @@ jobs:
     # The glob is one level deep on purpose: coverlet also leaves a copy of the file in a
     # per-host subfolder, and ** would load both.
     - name: Generate coverage report
-      uses: danielpalme/ReportGenerator-GitHub-Action@d3ebf1f760f7d8ab92cc44d9bcfee7ad73722a31 # 5.5.11
+      uses: danielpalme/ReportGenerator-GitHub-Action@861674232075b2c6bd1405a04c4bb9b150653e81 # 5.5.12
       if: always() && steps.test.outcome != 'skipped'
       with:
         reports: test-results/*/coverage.cobertura.xml
